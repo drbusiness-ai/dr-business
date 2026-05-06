@@ -1,0 +1,496 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Sparkles,
+  Play,
+  Flame,
+  ChevronDown,
+  ChevronUp,
+  Zap,
+  Target,
+  Users,
+  Star,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { testimonials, faqs } from "@/lib/mock-data";
+
+// ─── Navbar ────────────────────────────────────────────────────────────────
+function Navbar() {
+  return (
+    <nav className="fixed top-0 z-50 w-full border-b border-white/8 bg-slate-950/70 backdrop-blur-2xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-sky-300 to-violet-500 text-slate-950">
+            <Sparkles size={18} />
+          </div>
+          <span className="font-bold text-white text-lg">Dr. Business</span>
+        </Link>
+        <div className="hidden sm:flex items-center gap-6 text-sm text-slate-400">
+          <a href="#how-it-works" className="hover:text-white transition-colors">How it works</a>
+          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+          <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+        </div>
+        <div className="flex items-center gap-3">
+          <Link href="/dashboard">
+            <Button variant="ghost" size="sm">Sign in</Button>
+          </Link>
+          <Link href="/onboarding">
+            <Button variant="secondary" size="sm">Get Started Free</Button>
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// ─── Hero ──────────────────────────────────────────────────────────────────
+function Hero() {
+  return (
+    <section className="relative overflow-hidden pt-32 pb-24 px-6">
+      <div className="mx-auto max-w-4xl text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-4 py-1.5 text-xs text-sky-300 mb-8">
+          <Flame size={13} className="text-orange-400" />
+          <span>2,400+ freelancers earning their first ₹10K+ this month</span>
+        </div>
+
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.08] tracking-tight mb-6">
+          Stop Watching Gurus.{" "}
+          <span className="bg-gradient-to-r from-sky-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+            Start Building Income.
+          </span>
+        </h1>
+
+        <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+          Dr. Business gives you a personalized daily execution system to land
+          your first freelance client — in 30 days or less.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link href="/onboarding">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="gap-2 text-base h-14 px-8 shadow-[0_0_50px_rgba(14,165,233,0.3)]"
+            >
+              Start Your 30-Day Plan
+              <ArrowRight size={18} />
+            </Button>
+          </Link>
+          <Button
+            size="lg"
+            variant="ghost"
+            className="gap-2 text-base h-14 px-8 border border-white/10"
+          >
+            <Play size={16} className="text-sky-400" />
+            Watch Demo (2 min)
+          </Button>
+        </div>
+
+        <p className="mt-6 text-sm text-slate-500">
+          Free to start · No credit card required · Setup in 3 minutes
+        </p>
+      </div>
+
+      {/* Floating dashboard preview */}
+      <div className="mx-auto mt-20 max-w-5xl px-4">
+        <div className="rounded-2xl border border-white/10 bg-slate-950/80 p-1 shadow-[0_40px_120px_rgba(14,165,233,0.12)] backdrop-blur-xl">
+          <div className="rounded-xl bg-slate-950 p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="h-3 w-3 rounded-full bg-red-500/60" />
+              <div className="h-3 w-3 rounded-full bg-amber-500/60" />
+              <div className="h-3 w-3 rounded-full bg-emerald-500/60" />
+            </div>
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {["🔥 7-day streak", "✅ 23 tasks done", "📤 5 proposals"].map(
+                (m) => (
+                  <div
+                    key={m}
+                    className="rounded-xl border border-white/8 bg-white/3 p-3 text-xs text-slate-300"
+                  >
+                    {m}
+                  </div>
+                )
+              )}
+            </div>
+            <div className="space-y-2">
+              {[
+                { t: "Optimize Upwork headline", p: "High", done: true },
+                { t: "Create portfolio sample", p: "High", done: false },
+                { t: "Send 5 cold DMs", p: "Medium", done: false },
+              ].map((task) => (
+                <div
+                  key={task.t}
+                  className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/2 px-4 py-3"
+                >
+                  <div
+                    className={`size-5 rounded-full border-2 ${task.done ? "bg-sky-400 border-sky-400" : "border-white/20"} flex items-center justify-center`}
+                  >
+                    {task.done && <CheckCircle2 size={12} className="text-slate-950" />}
+                  </div>
+                  <span
+                    className={`flex-1 text-sm ${task.done ? "line-through text-slate-500" : "text-slate-300"}`}
+                  >
+                    {task.t}
+                  </span>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs ${task.p === "High" ? "bg-red-500/15 text-red-400" : "bg-amber-500/15 text-amber-400"}`}
+                  >
+                    {task.p}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Social Proof Bar ──────────────────────────────────────────────────────
+function SocialProof() {
+  const platforms = [
+    "Upwork", "Fiverr", "LinkedIn", "Toptal", "Freelancer.com", "99designs",
+  ];
+  return (
+    <section className="border-y border-white/8 py-6 px-6">
+      <div className="mx-auto max-w-5xl">
+        <p className="text-center text-xs text-slate-500 uppercase tracking-widest mb-6">
+          Our users land clients on
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-8">
+          {platforms.map((p) => (
+            <span key={p} className="text-slate-500 font-semibold text-sm">
+              {p}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Problem Section ───────────────────────────────────────────────────────
+function Problem() {
+  const problems = [
+    {
+      icon: "📺",
+      title: "You've watched 100+ hours of tutorials",
+      desc: "But you still haven't sent a single proposal.",
+    },
+    {
+      icon: "🔁",
+      title: "You're stuck in the 'learning loop'",
+      desc: "More content, more confusion, zero clients.",
+    },
+    {
+      icon: "😰",
+      title: "You don't know what to do NEXT",
+      desc: "No clear system = no momentum = no income.",
+    },
+    {
+      icon: "👻",
+      title: "You ghost your own goals",
+      desc: "Day 1 energy dies by Day 3 without structure.",
+    },
+  ];
+
+  return (
+    <section className="py-24 px-6" id="problem">
+      <div className="mx-auto max-w-5xl">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Why most people{" "}
+            <span className="text-red-400">never earn online</span>
+          </h2>
+          <p className="text-slate-400 max-w-xl mx-auto">
+            It&apos;s not a lack of talent. It&apos;s a lack of system. Here&apos;s what&apos;s
+            really happening:
+          </p>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {problems.map((p) => (
+            <Card key={p.title} className="p-6">
+              <span className="text-3xl mb-3 block">{p.icon}</span>
+              <h3 className="font-semibold text-white mb-2">{p.title}</h3>
+              <p className="text-sm text-slate-400">{p.desc}</p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── How It Works ──────────────────────────────────────────────────────────
+function HowItWorks() {
+  const steps = [
+    {
+      num: "01",
+      icon: <Target size={24} className="text-sky-300" />,
+      title: "Build your personalized plan",
+      desc: "Answer 5 questions about your skill, time, and goals. Dr. Business generates your custom 30-day roadmap in seconds.",
+    },
+    {
+      num: "02",
+      icon: <CheckCircle2 size={24} className="text-emerald-300" />,
+      title: "Execute daily tasks",
+      desc: "Every morning, 3–5 high-leverage tasks await you. No decision fatigue — just open the app and start.",
+    },
+    {
+      num: "03",
+      icon: <Zap size={24} className="text-amber-300" />,
+      title: "Land your first client",
+      desc: "Follow the system. Your AI coach guides every step. Most users land their first client in 21–30 days.",
+    },
+  ];
+
+  return (
+    <section className="py-24 px-6 bg-gradient-to-b from-transparent to-sky-950/20" id="how-it-works">
+      <div className="mx-auto max-w-5xl">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            How Dr. Business works
+          </h2>
+          <p className="text-slate-400">
+            A 3-step system designed for real execution, not passive learning.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {steps.map((s) => (
+            <div key={s.num} className="text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                {s.icon}
+              </div>
+              <div className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">
+                Step {s.num}
+              </div>
+              <h3 className="font-bold text-white text-lg mb-3">{s.title}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Testimonials ──────────────────────────────────────────────────────────
+function Testimonials() {
+  return (
+    <section className="py-24 px-6">
+      <div className="mx-auto max-w-5xl">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Real users. Real income.
+          </h2>
+          <p className="text-slate-400">Not theory. Not hype. Execution results.</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {testimonials.map((t) => (
+            <Card key={t.id} className="p-6 flex flex-col gap-4">
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={14} className="fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed flex-1">
+                &ldquo;{t.content}&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="grid size-10 place-items-center rounded-full bg-gradient-to-br from-sky-400 to-violet-500 text-xs font-bold text-white">
+                  {t.avatar}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">{t.name}</p>
+                  <p className="text-xs text-emerald-400">{t.role}</p>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Pricing ──────────────────────────────────────────────────────────────
+function Pricing() {
+  return (
+    <section className="py-24 px-6" id="pricing">
+      <div className="mx-auto max-w-3xl">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Simple, honest pricing
+          </h2>
+          <p className="text-slate-400">Start free. Upgrade when you&apos;re ready.</p>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-6">
+          {/* Free */}
+          <Card className="p-8">
+            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+              Free
+            </p>
+            <p className="text-5xl font-bold text-white mb-1">₹0</p>
+            <p className="text-slate-400 text-sm mb-8">Forever free, no card needed</p>
+            <ul className="space-y-3 mb-8">
+              {[
+                "Personalized 30-day roadmap",
+                "5 daily tasks",
+                "Basic AI coach (5 msgs/day)",
+                "Tool vault access",
+                "Progress tracker",
+              ].map((f) => (
+                <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
+                  <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/onboarding">
+              <Button variant="outline" className="w-full">
+                Get Started Free
+              </Button>
+            </Link>
+          </Card>
+
+          {/* Pro */}
+          <Card className="p-8 border-sky-400/30 bg-gradient-to-br from-sky-400/10 to-violet-400/5 relative overflow-hidden">
+            <div className="absolute top-4 right-4 rounded-full bg-sky-400 px-3 py-1 text-xs font-bold text-slate-950">
+              Most Popular
+            </div>
+            <p className="text-xs font-bold uppercase tracking-widest text-sky-400 mb-4">
+              Pro
+            </p>
+            <p className="text-5xl font-bold text-white mb-1">
+              ₹499
+              <span className="text-lg text-slate-400 font-normal">/mo</span>
+            </p>
+            <p className="text-slate-400 text-sm mb-8">Cancel anytime</p>
+            <ul className="space-y-3 mb-8">
+              {[
+                "Everything in Free",
+                "Unlimited AI coach messages",
+                "Advanced execution analytics",
+                "Client email scripts",
+                "Proposal templates",
+                "Priority support",
+                "Early access to new features",
+              ].map((f) => (
+                <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
+                  <CheckCircle2 size={15} className="text-sky-400 flex-shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/onboarding">
+              <Button
+                variant="secondary"
+                className="w-full shadow-[0_0_30px_rgba(14,165,233,0.25)]"
+              >
+                Start Pro — 7 Days Free
+              </Button>
+            </Link>
+          </Card>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── FAQ ──────────────────────────────────────────────────────────────────
+function FAQ() {
+  const [open, setOpen] = useState<number | null>(null);
+
+  return (
+    <section className="py-24 px-6" id="faq">
+      <div className="mx-auto max-w-3xl">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Frequently asked questions
+          </h2>
+        </div>
+        <div className="space-y-3">
+          {faqs.map((faq, i) => (
+            <Card key={i} className="overflow-hidden">
+              <button
+                onClick={() => setOpen(open === i ? null : i)}
+                className="flex w-full items-center justify-between p-6 text-left"
+              >
+                <span className="font-medium text-white text-sm">{faq.q}</span>
+                {open === i ? (
+                  <ChevronUp size={18} className="text-slate-400 flex-shrink-0" />
+                ) : (
+                  <ChevronDown size={18} className="text-slate-400 flex-shrink-0" />
+                )}
+              </button>
+              {open === i && (
+                <div className="px-6 pb-6">
+                  <p className="text-sm text-slate-400 leading-relaxed">{faq.a}</p>
+                </div>
+              )}
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── CTA Footer ───────────────────────────────────────────────────────────
+function CTAFooter() {
+  return (
+    <section className="py-24 px-6 text-center border-t border-white/8">
+      <div className="mx-auto max-w-2xl">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-300 to-violet-500">
+          <Sparkles size={28} className="text-slate-950" />
+        </div>
+        <h2 className="text-4xl font-bold text-white mb-4">
+          Your first client is 30 days away.
+        </h2>
+        <p className="text-slate-400 mb-10">
+          Stop waiting for the perfect moment. The system is ready. You just
+          need to start.
+        </p>
+        <Link href="/onboarding">
+          <Button
+            size="lg"
+            variant="secondary"
+            className="gap-2 text-base h-14 px-10 shadow-[0_0_60px_rgba(14,165,233,0.3)]"
+          >
+            Start Your 30-Day Plan
+            <ArrowRight size={18} />
+          </Button>
+        </Link>
+        <p className="mt-5 text-sm text-slate-500">
+          Free · No card required · Takes 3 minutes
+        </p>
+      </div>
+      <div className="mt-16 border-t border-white/8 pt-8 text-xs text-slate-600">
+        © 2026 Dr. Business. All rights reserved. · Stop consuming. Start executing.
+      </div>
+    </section>
+  );
+}
+
+// ─── Main Page ─────────────────────────────────────────────────────────────
+export default function LandingPage() {
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      <Hero />
+      <SocialProof />
+      <Problem />
+      <HowItWorks />
+      <Testimonials />
+      <Pricing />
+      <FAQ />
+      <CTAFooter />
+    </div>
+  );
+}
