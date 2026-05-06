@@ -57,7 +57,26 @@ export default async function DashboardPage() {
           Day {user.currentDay} of your 30-day plan. You&apos;re {user.firstClientProgress}% there — keep executing.
         </p>
       </div>
-
+      {!user.quickWinCompleted && (
+        <div className="mb-8">
+          <Card className="p-4 border-amber-400/30 bg-gradient-to-r from-amber-400/10 to-amber-600/5 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="grid size-10 place-items-center rounded-full bg-amber-400/20 text-amber-400">
+                <Zap size={20} />
+              </div>
+              <div>
+                <h3 className="text-amber-400 font-bold">Complete your Quick Win 🎯</h3>
+                <p className="text-sm text-slate-300">Takes 15 minutes. Start building real momentum right now.</p>
+              </div>
+            </div>
+            <Link href="/quickwin" className="flex-shrink-0">
+              <Button className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold gap-2">
+                Do It Now <ArrowRight size={16} />
+              </Button>
+            </Link>
+          </Card>
+        </div>
+      )}
       <div className="mb-8 rounded-2xl border border-sky-400/20 bg-gradient-to-r from-sky-400/10 via-transparent to-violet-400/10 p-5 flex flex-wrap items-center gap-6">
         <div className="flex items-center gap-3">
           <div className="grid size-12 place-items-center rounded-2xl bg-orange-400/15 text-orange-400">
@@ -142,28 +161,6 @@ export default async function DashboardPage() {
               )}
             </div>
           </section>
-
-          <Card className="p-6 border-emerald-400/20 bg-gradient-to-r from-emerald-400/10 to-sky-400/5">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2">
-                  Quick Win
-                </p>
-                <h3 className="text-white font-semibold text-lg mb-1">
-                  Complete your top priority task
-                </h3>
-                <p className="text-sm text-slate-400">
-                  Knock it out in the next 30 minutes and build immediate momentum.
-                </p>
-              </div>
-              <Link href="/tasks" className="flex-shrink-0">
-                <Button variant="outline" size="sm" className="gap-1 border-emerald-400/30">
-                  Do This Now
-                  <ArrowRight size={14} />
-                </Button>
-              </Link>
-            </div>
-          </Card>
 
           <AIInsight content={aiInsightText} />
         </div>

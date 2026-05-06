@@ -59,6 +59,10 @@ model User {
   waitlistPosition Int?
   waitlistedAt     DateTime?
 
+  // Quick Win (Feature 1)
+  quickWinCompleted   Boolean   @default(false)
+  quickWinCompletedAt DateTime?
+
   // Relations
   accounts      Account[]
   sessions      Session[]

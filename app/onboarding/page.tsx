@@ -243,15 +243,16 @@ export default function OnboardingPage() {
             ))}
           </div>
 
-          <Button
-            size="lg"
-            variant="secondary"
-            className="w-full gap-2 text-base h-14 shadow-[0_0_40px_rgba(14,165,233,0.3)]"
-            onClick={() => router.push("/dashboard")}
-          >
-            Enter Your Dashboard
-            <ArrowRight size={18} />
-          </Button>
+          <Link href="/quickwin">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="w-full gap-2 text-base h-14 shadow-[0_0_40px_rgba(14,165,233,0.3)]"
+            >
+              Enter Your Dashboard
+              <ArrowRight size={18} />
+            </Button>
+          </Link>
         </div>
       </div>
     );
