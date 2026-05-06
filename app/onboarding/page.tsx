@@ -72,6 +72,7 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResult, setShowResult] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const step = steps[currentStep];
   const selected = answers[step?.id] ?? null;
@@ -81,11 +82,29 @@ export default function OnboardingPage() {
     setAnswers((prev) => ({ ...prev, [step.id]: value }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep((s) => s + 1);
     } else {
-      setShowResult(true);
+      setIsGenerating(true);
+      try {
+        await fetch("/api/onboarding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            skill: answers[1],
+            hoursPerDay: answers[2],
+            experienceLevel: answers[3],
+            platforms: answers[4] === "Smartphone" ? ["Instagram", "Mobile"] : ["Upwork", "LinkedIn"],
+            incomeGoal: answers[5]
+          })
+        });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsGenerating(false);
+        setShowResult(true);
+      }
     }
   };
 
@@ -218,10 +237,10 @@ export default function OnboardingPage() {
             <Button
               variant="secondary"
               onClick={handleNext}
-              disabled={!selected}
+              disabled={!selected || isGenerating}
               className="gap-2 px-8 shadow-[0_0_30px_rgba(14,165,233,0.2)]"
             >
-              {currentStep === steps.length - 1 ? "Generate My Plan" : "Continue"}
+              {isGenerating ? "Generating..." : currentStep === steps.length - 1 ? "Generate My Plan" : "Continue"}
               <ArrowRight size={16} />
             </Button>
           </div>

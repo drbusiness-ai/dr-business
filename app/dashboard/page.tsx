@@ -15,32 +15,56 @@ import {
   Circle,
   Zap,
 } from "lucide-react";
-import { user, tasks, milestones } from "@/lib/mock-data";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import { generateAIInsight } from "@/lib/ai-engine";
 
-const todaysTasks = tasks.slice(0, 3);
+export default async function DashboardPage() {
+  const session = await auth();
+  if (!session?.user?.id) redirect("/login");
 
-export default function DashboardPage() {
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: {
+      tasks: {
+        where: {
+          date: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+        },
+        orderBy: { priority: "asc" },
+      },
+    },
+  });
+
+  if (!user) redirect("/login");
+
+  const todaysTasks = user.tasks.slice(0, 3);
+  const aiInsightText = await generateAIInsight({
+    skill: user.skill || "freelancing",
+    platforms: user.platforms,
+    currentDay: user.currentDay,
+    firstClientProgress: user.firstClientProgress,
+  });
+
   return (
-    <AppShell>
-      {/* Header greeting */}
+    <AppShell activePath="/dashboard">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-1">
-          Good morning, {user.name} 👋
+          Good morning, {user.name || "Friend"} 👋
         </h1>
         <p className="text-slate-400">
-          Day 12 of your 30-day plan. You&apos;re 42% there — keep executing.
+          Day {user.currentDay} of your 30-day plan. You&apos;re {user.firstClientProgress}% there — keep executing.
         </p>
       </div>
 
-      {/* XP / Streak Banner */}
       <div className="mb-8 rounded-2xl border border-sky-400/20 bg-gradient-to-r from-sky-400/10 via-transparent to-violet-400/10 p-5 flex flex-wrap items-center gap-6">
         <div className="flex items-center gap-3">
           <div className="grid size-12 place-items-center rounded-2xl bg-orange-400/15 text-orange-400">
             <Flame size={24} />
           </div>
           <div>
-            <p className="text-2xl font-bold text-white">🔥 {user.streak} days</p>
+            <p className="text-2xl font-bold text-white">🔥 {user.currentStreak} days</p>
             <p className="text-xs text-slate-400">Current streak</p>
           </div>
         </div>
@@ -51,7 +75,7 @@ export default function DashboardPage() {
           <div>
             <p className="text-2xl font-bold text-white">
               Level {user.level} —{" "}
-              <span className="text-sky-300">{user.xp} XP</span>
+              <span className="text-sky-300">{user.xpTotal} XP</span>
             </p>
             <p className="text-xs text-slate-400">Experience points</p>
           </div>
@@ -68,9 +92,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Main column */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Today's Focus */}
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-white">
@@ -84,40 +106,43 @@ export default function DashboardPage() {
               </Link>
             </div>
             <div className="space-y-3">
-              {todaysTasks.map((task) => (
-                <Card key={task.id} className="p-4 flex items-center gap-4">
-                  <div className="flex-shrink-0">
-                    {task.completed ? (
-                      <CheckCircle2 size={20} className="text-sky-400" />
-                    ) : (
-                      <Circle size={20} className="text-slate-600" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p
-                      className={`font-medium text-sm ${task.completed ? "line-through text-slate-500" : "text-white"}`}
+              {todaysTasks.length === 0 ? (
+                <div className="text-slate-400 text-sm py-4">No tasks found for today. Check your Tasks page to generate them!</div>
+              ) : (
+                todaysTasks.map((task) => (
+                  <Card key={task.id} className="p-4 flex items-center gap-4">
+                    <div className="flex-shrink-0">
+                      {task.status === "COMPLETED" ? (
+                        <CheckCircle2 size={20} className="text-sky-400" />
+                      ) : (
+                        <Circle size={20} className="text-slate-600" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className={`font-medium text-sm ${task.status === "COMPLETED" ? "line-through text-slate-500" : "text-white"}`}
+                      >
+                        {task.title}
+                      </p>
+                      <p className="text-xs text-slate-500">{task.estimatedMinutes} min</p>
+                    </div>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-xs flex-shrink-0 ${
+                        task.priority === "HIGH"
+                          ? "bg-red-500/15 text-red-400"
+                          : task.priority === "MEDIUM"
+                            ? "bg-amber-500/15 text-amber-400"
+                            : "bg-slate-500/15 text-slate-400"
+                      }`}
                     >
-                      {task.title}
-                    </p>
-                    <p className="text-xs text-slate-500">{task.duration}</p>
-                  </div>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs flex-shrink-0 ${
-                      task.priority === "High"
-                        ? "bg-red-500/15 text-red-400"
-                        : task.priority === "Medium"
-                          ? "bg-amber-500/15 text-amber-400"
-                          : "bg-slate-500/15 text-slate-400"
-                    }`}
-                  >
-                    {task.priority}
-                  </span>
-                </Card>
-              ))}
+                      {task.priority}
+                    </span>
+                  </Card>
+                ))
+              )}
             </div>
           </section>
 
-          {/* Quick Win Card */}
           <Card className="p-6 border-emerald-400/20 bg-gradient-to-r from-emerald-400/10 to-sky-400/5">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -125,10 +150,10 @@ export default function DashboardPage() {
                   Quick Win
                 </p>
                 <h3 className="text-white font-semibold text-lg mb-1">
-                  Send your first Upwork proposal today
+                  Complete your top priority task
                 </h3>
                 <p className="text-sm text-slate-400">
-                  Takes 20 minutes. Could change your entire trajectory.
+                  Knock it out in the next 30 minutes and build immediate momentum.
                 </p>
               </div>
               <Link href="/tasks" className="flex-shrink-0">
@@ -140,13 +165,10 @@ export default function DashboardPage() {
             </div>
           </Card>
 
-          {/* AI Insight */}
-          <AIInsight content="Based on your skill (Graphic Design), Upwork has 2,400+ active jobs this week. Your best window to apply is Tuesday–Thursday morning — competition is 34% lower than weekends." />
+          <AIInsight content={aiInsightText} />
         </div>
 
-        {/* Right column */}
         <div className="space-y-6">
-          {/* Stats */}
           <section>
             <h2 className="text-lg font-semibold text-white mb-4">
               Momentum Stats
@@ -154,7 +176,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 gap-3">
               <MetricCard
                 label="Day Streak"
-                value={`🔥 ${user.streak}`}
+                value={`🔥 ${user.currentStreak}`}
                 icon={Flame}
               />
               <MetricCard
@@ -173,14 +195,6 @@ export default function DashboardPage() {
                 icon={User}
               />
             </div>
-          </section>
-
-          {/* Upcoming Milestone */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-4">
-              Next Milestone
-            </h2>
-            <MilestoneCard milestone={milestones[2]} index={2} />
           </section>
         </div>
       </div>

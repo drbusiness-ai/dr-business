@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { testimonials, faqs } from "@/lib/mock-data";
+import { useEffect } from "react";
 
 // ─── Navbar ────────────────────────────────────────────────────────────────
 function Navbar() {
@@ -70,30 +71,7 @@ function Hero() {
           your first freelance client — in 30 days or less.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/onboarding">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="gap-2 text-base h-14 px-8 shadow-[0_0_50px_rgba(14,165,233,0.3)]"
-            >
-              Start Your 30-Day Plan
-              <ArrowRight size={18} />
-            </Button>
-          </Link>
-          <Button
-            size="lg"
-            variant="ghost"
-            className="gap-2 text-base h-14 px-8 border border-white/10"
-          >
-            <Play size={16} className="text-sky-400" />
-            Watch Demo (2 min)
-          </Button>
-        </div>
-
-        <p className="mt-6 text-sm text-slate-500">
-          Free to start · No credit card required · Setup in 3 minutes
-        </p>
+        <WaitlistForm />
       </div>
 
       {/* Floating dashboard preview */}
@@ -146,6 +124,132 @@ function Hero() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Waitlist Form ─────────────────────────────────────────────────────────
+function WaitlistForm() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [position, setPosition] = useState<number | null>(null);
+  const [count, setCount] = useState<number>(2400);
+
+  useEffect(() => {
+    fetch("/api/waitlist")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.count) setCount(Math.max(2400, data.count));
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus("success");
+        setPosition(data.position);
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="mx-auto max-w-md p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center animate-in fade-in zoom-in duration-500">
+        <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2">You&apos;re on the list!</h3>
+        <p className="text-emerald-200">You are #{position} in line. Keep an eye on your inbox.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <div className="relative flex items-center">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email address"
+            required
+            className="w-full h-14 pl-6 pr-32 bg-[#111118] border border-slate-700 focus:border-sky-500/50 rounded-full text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-4 focus:ring-sky-500/10 transition-all shadow-[0_0_30px_rgba(14,165,233,0.1)]"
+          />
+          <Button
+            type="submit"
+            disabled={status === "loading"}
+            className="absolute right-1.5 h-11 px-6 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold transition-all disabled:opacity-50"
+          >
+            {status === "loading" ? "Joining..." : "Join Waitlist"}
+          </Button>
+        </div>
+        {status === "error" && (
+          <p className="text-red-400 text-sm mt-1">Something went wrong. Please try again.</p>
+        )}
+      </form>
+      <p className="mt-4 text-sm text-slate-500 flex items-center justify-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="font-semibold text-slate-300">{count.toLocaleString()}</span> freelancers already joined
+      </p>
+    </div>
+  );
+}
+
+// ─── Wins Feed ─────────────────────────────────────────────────────────────
+function WinsFeedSection() {
+  const [wins, setWins] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/wins")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setWins(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  if (wins.length === 0) return null;
+
+  return (
+    <section className="py-12 border-y border-white/8 bg-slate-950/50 overflow-hidden">
+      <div className="mx-auto max-w-7xl px-6">
+        <p className="text-center text-xs text-sky-400 font-semibold uppercase tracking-widest mb-8 flex items-center justify-center gap-2">
+          <Flame size={14} className="text-orange-400" /> Live Execution Feed
+        </p>
+        <div className="flex gap-6 animate-[scroll_40s_linear_infinite] w-max hover:[animation-play-state:paused]">
+          {[...wins, ...wins].map((win, i) => (
+            <div key={i} className="flex-shrink-0 w-[300px] rounded-2xl bg-[#111118] border border-white/5 p-4 shadow-xl">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
+                  {win.userName.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-200">{win.userName}</p>
+                  <p className="text-xs text-slate-500">{win.userSkill}</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-300 mt-2">
+                <span className="text-emerald-400 font-medium mr-1">{win.winType}</span>
+                {win.winText}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -484,6 +588,7 @@ export default function LandingPage() {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
+      <WinsFeedSection />
       <SocialProof />
       <Problem />
       <HowItWorks />

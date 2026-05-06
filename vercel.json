@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/notifications/ping?type=morning",
+      "schedule": "30 3 * * *"
+    },
+    {
+      "path": "/api/notifications/ping?type=afternoon",
+      "schedule": "30 8 * * *"
+    },
+    {
+      "path": "/api/notifications/ping?type=evening",
+      "schedule": "30 14 * * *"
+    }
+  ]
+}

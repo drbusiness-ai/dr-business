@@ -5,38 +5,47 @@ import { Clock, Sparkles, CheckCircle2, Circle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/components/ui/utils";
-import type { Task, Priority } from "@/lib/mock-data";
 
-interface TaskCardProps {
-  task: Task;
-  onToggle?: (id: string) => void;
+interface TaskProps {
+  id: string;
+  title: string;
+  description: string;
+  whyItMatters: string;
+  estimatedMinutes: number;
+  priority: "HIGH" | "MEDIUM" | "LOW";
+  status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "SKIPPED";
 }
 
-const priorityConfig: Record<Priority, { label: string; className: string }> = {
-  High: {
+interface TaskCardProps {
+  task: TaskProps;
+  onToggle?: (id: string, newStatus: string) => void;
+}
+
+const priorityConfig: Record<string, { label: string; className: string }> = {
+  HIGH: {
     label: "High",
     className: "bg-red-500/15 text-red-400 border border-red-400/20",
   },
-  Medium: {
+  MEDIUM: {
     label: "Medium",
-    className:
-      "bg-amber-500/15 text-amber-400 border border-amber-400/20",
+    className: "bg-amber-500/15 text-amber-400 border border-amber-400/20",
   },
-  Low: {
+  LOW: {
     label: "Low",
     className: "bg-slate-500/15 text-slate-400 border border-slate-400/20",
   },
 };
 
 export function TaskCard({ task, onToggle }: TaskCardProps) {
-  const [completed, setCompleted] = useState(task.completed);
+  const [completed, setCompleted] = useState(task.status === "COMPLETED");
 
   const handleToggle = () => {
-    setCompleted((v) => !v);
-    onToggle?.(task.id);
+    const newStatus = completed ? "PENDING" : "COMPLETED";
+    setCompleted(!completed);
+    onToggle?.(task.id, newStatus);
   };
 
-  const p = priorityConfig[task.priority];
+  const p = priorityConfig[task.priority] || priorityConfig.MEDIUM;
 
   return (
     <Card
@@ -77,11 +86,13 @@ export function TaskCard({ task, onToggle }: TaskCardProps) {
               {p.label}
             </span>
           </div>
-          <p className="text-sm text-slate-400 mb-3">{task.why}</p>
+          <p className="text-sm text-slate-400 mb-1">{task.description}</p>
+          <p className="text-xs text-sky-400/70 mb-3 italic">Why: {task.whyItMatters}</p>
+          
           <div className="flex items-center gap-3 flex-wrap">
             <span className="flex items-center gap-1 text-xs text-slate-500">
               <Clock size={12} />
-              {task.duration}
+              {task.estimatedMinutes} min
             </span>
             {!completed && (
               <div className="flex gap-2">
@@ -91,7 +102,7 @@ export function TaskCard({ task, onToggle }: TaskCardProps) {
                   className="h-8 text-xs px-3"
                   onClick={handleToggle}
                 >
-                  Start Task
+                  Complete Task
                 </Button>
                 <Button
                   size="sm"

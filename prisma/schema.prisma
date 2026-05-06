@@ -1,0 +1,323 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── User ──────────────────────────────────────────────────────────
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  emailVerified DateTime?
+
+  // Subscription
+  plan                   Plan      @default(FREE)
+  planStatus             PlanStatus @default(INACTIVE)
+  razorpayCustomerId     String?
+  razorpaySubscriptionId String?
+  subscriptionEndsAt     DateTime?
+  isStudentVerified      Boolean   @default(false)
+
+  // Onboarding
+  onboardingCompleted Boolean  @default(false)
+  skill               String?
+  hoursPerDay         String?
+  experienceLevel     String?
+  incomeGoal          String?
+  currentIncome       String?
+  hadClientBefore     Boolean?
+  platforms           String[]
+  hasPortfolio        Boolean?
+  biggestChallenge    String?
+  dailySocialHours    String?
+
+  // AI Assessment
+  capabilityLevel CapabilityLevel @default(UNKNOWN)
+  capabilityScore Int             @default(0)
+  lastAssessedAt  DateTime?
+
+  // Progress
+  currentDay          Int       @default(1)
+  xpTotal             Int       @default(0)
+  level               Int       @default(1)
+  currentStreak       Int       @default(0)
+  longestStreak       Int       @default(0)
+  lastActiveDate      DateTime?
+  firstClientProgress Int       @default(0)
+
+  // Stats
+  tasksCompleted    Int @default(0)
+  proposalsSent     Int @default(0)
+  profileCompletion Int @default(0)
+
+  // Waitlist
+  isWaitlisted     Boolean  @default(false)
+  waitlistPosition Int?
+  waitlistedAt     DateTime?
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  tasks         Task[]
+  streakHistory StreakHistory[]
+  milestones    UserMilestone[]
+  messages      Message[]
+  notifications Notification[]
+  payments      Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── NextAuth Models ───────────────────────────────────────────────
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Tasks ─────────────────────────────────────────────────────────
+model Task {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title            String
+  description      String
+  whyItMatters     String
+  estimatedMinutes Int
+  priority         Priority   @default(MEDIUM)
+  status           TaskStatus @default(PENDING)
+  tool             String?
+  toolUrl          String?
+
+  // AI Generation metadata
+  aiGenerated   Boolean @default(true)
+  generatedForDay Int
+  skillContext  String?
+
+  // Completion
+  startedAt     DateTime?
+  completedAt   DateTime?
+  skippedAt     DateTime?
+  skippedReason String?
+
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Streak ────────────────────────────────────────────────────────
+model StreakHistory {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date           DateTime @default(now()) @db.Date
+  xpEarned       Int      @default(0)
+  tasksCompleted Int      @default(0)
+
+  @@unique([userId, date])
+}
+
+// ─── Milestones ────────────────────────────────────────────────────
+model Milestone {
+  id          String          @id @default(cuid())
+  title       String
+  description String
+  day         Int
+  xpReward    Int             @default(100)
+  icon        String?
+  users       UserMilestone[]
+}
+
+model UserMilestone {
+  id          String    @id @default(cuid())
+  userId      String
+  milestoneId String
+  unlockedAt  DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestone   Milestone @relation(fields: [milestoneId], references: [id])
+}
+
+// ─── AI Coach Messages ─────────────────────────────────────────────
+model Message {
+  id        String      @id @default(cuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      MessageRole
+  content   String      @db.Text
+  tokens    Int?
+  createdAt DateTime    @default(now())
+}
+
+// ─── Notifications ─────────────────────────────────────────────────
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  sentAt    DateTime?
+  createdAt DateTime         @default(now())
+}
+
+// ─── Payments ──────────────────────────────────────────────────────
+model Payment {
+  id                String        @id @default(cuid())
+  userId            String
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  razorpaySignature String?
+  amount            Int
+  currency          String        @default("INR")
+  plan              Plan
+  status            PaymentStatus @default(PENDING)
+  createdAt         DateTime      @default(now())
+}
+
+// ─── Waitlist ──────────────────────────────────────────────────────
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  skill     String?
+  source    String?
+  position  Int
+  createdAt DateTime @default(now())
+}
+
+// ─── Knowledge Base (Phase 2 — RAG) ───────────────────────────────
+model KnowledgeChunk {
+  id         String    @id @default(cuid())
+  category   String
+  topic      String
+  content    String    @db.Text
+  source     String?
+  vectorId   String?
+  validUntil DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+// ─── Tools ────────────────────────────────────────────────────────
+model Tool {
+  id           String   @id @default(cuid())
+  name         String
+  description  String
+  category     String
+  skills       String[]
+  url          String
+  affiliateUrl String?
+  pricing      String
+  isAffiliate  Boolean  @default(false)
+  commission   String?
+  isNew        Boolean  @default(false)
+  isFeatured   Boolean  @default(false)
+  rating       Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ─── Wins Feed ────────────────────────────────────────────────────
+model WinsFeed {
+  id        String   @id @default(cuid())
+  userId    String
+  userName  String
+  userSkill String
+  userCity  String?
+  winType   String
+  winText   String
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// ─── Enums ────────────────────────────────────────────────────────
+enum Plan {
+  FREE
+  STUDENT
+  PRO
+}
+
+enum PlanStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+enum CapabilityLevel {
+  UNKNOWN
+  EXECUTOR
+  INCONSISTENT
+  STUCK
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum NotificationType {
+  TASK_REMINDER
+  STREAK_ALERT
+  MILESTONE_UNLOCKED
+  NEW_TOOL
+  WEEKLY_REPORT
+  PAYMENT
+}
+
+enum PaymentStatus {
+  PENDING
+  CAPTURED
+  FAILED
+  REFUNDED
+}

@@ -2,14 +2,38 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Command, Flame, Menu, Sparkles } from "lucide-react";
-import { navItems, user } from "@/lib/data";
+import { useEffect, useState } from "react";
+import { Bell, Command, Flame, Menu, Sparkles, LayoutDashboard, CheckSquare, Target, Settings, MessageSquare } from "lucide-react";
 import { cn } from "@/components/ui/utils";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+const navItems = [
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Daily Tasks", href: "/tasks", icon: CheckSquare },
+  { label: "AI Coach", href: "/coach", icon: MessageSquare },
+  { label: "Progress", href: "/progress", icon: Target },
+  { label: "Settings", href: "/settings", icon: Settings },
+];
+
+export function AppShell({ children, activePath }: { children: React.ReactNode; activePath?: string }) {
   const pathname = usePathname();
+  const currentPath = activePath || pathname;
+  
+  const [user, setUser] = useState<any>({
+    name: "User",
+    currentStreak: 0,
+    firstClientProgress: 0,
+  });
+
+  useEffect(() => {
+    fetch("/api/user/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.error) setUser(data);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <main className="min-h-screen">
@@ -26,7 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <nav className="mt-8 space-y-1">
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            const active = currentPath === item.href;
             return (
               <Link
                 key={item.label}
@@ -48,9 +72,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="absolute bottom-5 left-4 right-4 rounded-2xl border border-sky-300/20 bg-sky-400/10 p-4">
           <div className="flex items-center gap-2 text-sm font-medium text-white">
             <Flame size={17} className="text-sky-300" />
-            {user.streak}-day execution streak
+            {user.currentStreak}-day execution streak
           </div>
-          <Progress value={user.firstClientProgress} className="mt-4" />
+          <Progress value={user.firstClientProgress} className="mt-4 h-1.5" />
           <p className="mt-3 text-xs leading-5 text-slate-400">
             {user.firstClientProgress}% toward first freelance client.
           </p>
@@ -65,7 +89,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Menu size={19} />
               </Button>
               <div>
-                <p className="text-sm text-slate-400">Welcome back, {user.name}</p>
+                <p className="text-sm text-slate-400">Welcome back, {user.name || "Friend"}</p>
                 <h1 className="text-lg font-semibold text-white sm:text-xl">
                   Today is for proof, outreach, and one clean win.
                 </h1>

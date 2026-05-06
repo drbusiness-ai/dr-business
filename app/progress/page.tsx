@@ -1,18 +1,25 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { MilestoneCard } from "@/components/milestone-card";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import {
-  milestones,
-  badges,
-  streakData,
-  xpHistory,
-  user,
-} from "@/lib/mock-data";
-import { Flame, CheckSquare, Send, Calendar, Zap, Lock } from "lucide-react";
+import { Flame, CheckSquare, Send, Calendar, Zap, Loader2 } from "lucide-react";
 
 // ─── Streak Heatmap ─────────────────────────────────────────────────────────
-function StreakHeatmap() {
+function StreakHeatmap({ streakData }: { streakData: any[] }) {
+  // Generate last 30 days
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const days = Array.from({ length: 30 }).map((_, i) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() - (29 - i));
+    const active = streakData.some(sd => new Date(sd.date).getTime() === d.getTime() && sd.active);
+    return { date: d.toISOString().split('T')[0], active };
+  });
+
   return (
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-4">
@@ -20,7 +27,7 @@ function StreakHeatmap() {
         <h3 className="font-semibold text-white">Activity — Last 30 Days</h3>
       </div>
       <div className="flex flex-wrap gap-1.5">
-        {streakData.map((day) => (
+        {days.map((day) => (
           <div
             key={day.date}
             title={day.date}
@@ -47,8 +54,22 @@ function StreakHeatmap() {
 }
 
 // ─── XP Bar Chart ────────────────────────────────────────────────────────────
-function XPChart() {
-  const maxXP = Math.max(...xpHistory.map((d) => d.xp));
+function XPChart({ streakData }: { streakData: any[] }) {
+  // Generate last 7 days
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const days = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() - (6 - i));
+    const historyItem = streakData.find(sd => new Date(sd.date).getTime() === d.getTime());
+    return {
+      day: d.toLocaleDateString("en-US", { weekday: "short" }),
+      xp: historyItem ? historyItem.xpEarned : 0
+    };
+  });
+
+  const maxXP = Math.max(100, ...days.map((d) => d.xp));
 
   return (
     <Card className="p-6">
@@ -57,8 +78,8 @@ function XPChart() {
         <h3 className="font-semibold text-white">XP Earned — Last 7 Days</h3>
       </div>
       <div className="flex items-end justify-between gap-2 h-28">
-        {xpHistory.map((d) => (
-          <div key={d.day} className="flex flex-1 flex-col items-center gap-1">
+        {days.map((d, i) => (
+          <div key={i} className="flex flex-1 flex-col items-center gap-1">
             <span className="text-xs text-slate-500">{d.xp}</span>
             <div
               className="w-full rounded-t-lg bg-gradient-to-t from-sky-600 to-sky-400 transition-all"
@@ -74,8 +95,33 @@ function XPChart() {
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
 export default function ProgressPage() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/progress")
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setUser(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <AppShell activePath="/progress">
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (!user) return null;
+
   return (
-    <AppShell>
+    <AppShell activePath="/progress">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">My Progress</h1>
         <p className="text-slate-400">
@@ -105,8 +151,8 @@ export default function ProgressPage() {
       </Card>
 
       <div className="grid lg:grid-cols-2 gap-8 mb-8">
-        <StreakHeatmap />
-        <XPChart />
+        <StreakHeatmap streakData={user.streakHistory || []} />
+        <XPChart streakData={user.streakHistory || []} />
       </div>
 
       {/* Stats row */}
@@ -114,8 +160,8 @@ export default function ProgressPage() {
         {[
           { label: "Tasks Completed", value: user.tasksCompleted, icon: CheckSquare, color: "text-sky-400" },
           { label: "Proposals Sent", value: user.proposalsSent, icon: Send, color: "text-violet-400" },
-          { label: "Day Streak", value: `${user.streak} 🔥`, icon: Flame, color: "text-orange-400" },
-          { label: "Days Active", value: user.daysActive, icon: Calendar, color: "text-emerald-400" },
+          { label: "Day Streak", value: `${user.currentStreak} 🔥`, icon: Flame, color: "text-orange-400" },
+          { label: "Days Active", value: user.streakHistory?.length || 0, icon: Calendar, color: "text-emerald-400" },
         ].map((stat) => (
           <Card key={stat.label} className="p-5 text-center">
             <stat.icon size={20} className={`${stat.color} mx-auto mb-2`} />
@@ -131,41 +177,13 @@ export default function ProgressPage() {
           <h2 className="text-lg font-semibold text-white mb-5">
             Roadmap Milestones
           </h2>
-          {milestones.map((m, i) => (
-            <MilestoneCard key={m.id} milestone={m} index={i} />
-          ))}
+          {user.milestones && user.milestones.length > 0 ? user.milestones.map((m: any, i: number) => (
+            <MilestoneCard key={m.id} milestone={m.milestone} index={i} />
+          )) : (
+            <div className="text-slate-400 text-sm">No milestones unlocked yet. Keep working!</div>
+          )}
         </section>
 
-        {/* Badges */}
-        <section>
-          <h2 className="text-lg font-semibold text-white mb-5">
-            Badges Earned
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            {badges.map((badge) => (
-              <Card
-                key={badge.id}
-                className={`p-5 text-center ${
-                  badge.earned
-                    ? "border-amber-400/20 bg-amber-400/5"
-                    : "opacity-40"
-                }`}
-              >
-                <span className="text-3xl mb-2 block">{badge.emoji}</span>
-                <p className="font-semibold text-white text-sm">{badge.name}</p>
-                <p className="text-xs text-slate-400 mt-1">{badge.description}</p>
-                {badge.earned ? (
-                  <p className="text-xs text-amber-400 mt-2">{badge.earnedDate}</p>
-                ) : (
-                  <div className="flex items-center justify-center gap-1 mt-2 text-xs text-slate-500">
-                    <Lock size={10} />
-                    Locked
-                  </div>
-                )}
-              </Card>
-            ))}
-          </div>
-        </section>
       </div>
     </AppShell>
   );

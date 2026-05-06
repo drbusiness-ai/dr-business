@@ -1,0 +1,26 @@
+{
+  "name": "Dr. Business",
+  "short_name": "Dr. Business",
+  "description": "AI-powered freelancer execution system — land your first client in 30 days",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#7C3AED",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "business", "education"],
+  "lang": "en",
+  "dir": "ltr"
+}
