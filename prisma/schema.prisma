@@ -67,6 +67,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   tasks         Task[]
+  proposals     Proposal[]
   streakHistory StreakHistory[]
   milestones    UserMilestone[]
   messages      Message[]
@@ -325,3 +326,18 @@ enum PaymentStatus {
   FAILED
   REFUNDED
 }
+
+// ─── Proposals (Feature 2) ─────────────────────────────────────────
+model Proposal {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobDescription String   @db.Text
+  platform       String
+  angle          String
+  content        String   @db.Text
+  score          Int?
+  used           Boolean  @default(false)
+  createdAt      DateTime @default(now())
+}
+

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Bell, Command, Flame, Menu, Sparkles, LayoutDashboard, CheckSquare, Target, Settings, MessageSquare } from "lucide-react";
+import { Bell, Command, Flame, Menu, Sparkles, LayoutDashboard, CheckSquare, Target, Settings, MessageSquare, FileText } from "lucide-react";
 import { cn } from "@/components/ui/utils";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Daily Tasks", href: "/tasks", icon: CheckSquare },
+  { label: "Proposals", href: "/proposals", icon: FileText },
   { label: "AI Coach", href: "/coach", icon: MessageSquare },
   { label: "Progress", href: "/progress", icon: Target },
   { label: "Settings", href: "/settings", icon: Settings },
