@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OnboardingStep } from "@/components/onboarding-step";
-import { Progress } from "@/components/ui/progress";
 
 const steps = [
   {
@@ -18,8 +17,10 @@ const steps = [
       { value: "Video Editing", label: "Video Editing", emoji: "🎬" },
       { value: "Copywriting", label: "Copywriting", emoji: "✍️" },
       { value: "Web Development", label: "Web Development", emoji: "💻" },
-      { value: "Social Media", label: "Social Media", emoji: "📱" },
+      { value: "Social Media Management", label: "Social Media", emoji: "📱" },
       { value: "UI/UX Design", label: "UI/UX Design", emoji: "🖌️" },
+      { value: "LinkedIn Ghostwriting", label: "LinkedIn Writing", emoji: "🔗" },
+      { value: "AI Automation", label: "AI Automation", emoji: "🤖" },
     ],
   },
   {
@@ -27,10 +28,10 @@ const steps = [
     title: "How many hours per day can you commit?",
     description: "Be honest — consistency beats intensity every time.",
     options: [
-      { value: "1 hour", label: "1 hour", emoji: "🕐" },
-      { value: "2 hours", label: "2 hours", emoji: "🕑" },
-      { value: "3-4 hours", label: "3–4 hours", emoji: "🕒" },
-      { value: "5+ hours", label: "5+ hours", emoji: "🚀" },
+      { value: "1", label: "1 hour", emoji: "🕐" },
+      { value: "2", label: "2 hours", emoji: "🕑" },
+      { value: "3", label: "3–4 hours", emoji: "🕒" },
+      { value: "5", label: "5+ hours", emoji: "🚀" },
     ],
   },
   {
@@ -46,23 +47,81 @@ const steps = [
   },
   {
     id: 4,
-    title: "What device will you primarily use?",
-    description: "We'll optimize your experience for your setup.",
+    title: "What is your current monthly income?",
+    description: "This helps us understand your baseline and set realistic targets.",
     options: [
-      { value: "Laptop/Desktop", label: "Laptop / Desktop", emoji: "💻" },
-      { value: "Smartphone", label: "Smartphone", emoji: "📱" },
-      { value: "Both", label: "Both", emoji: "🔄" },
+      { value: "₹0", label: "₹0 — Not earning yet", emoji: "😤" },
+      { value: "₹5,000–₹15,000", label: "₹5,000 – ₹15,000", emoji: "💸" },
+      { value: "₹15,000–₹40,000", label: "₹15,000 – ₹40,000", emoji: "💰" },
+      { value: "₹40,000+", label: "₹40,000+", emoji: "🏆" },
     ],
   },
   {
     id: 5,
-    title: "What's your income goal in 30 days?",
+    title: "What's your income goal in the next 30 days?",
     description: "Set a real target. Dr. Business will build your plan around it.",
     options: [
       { value: "₹5,000", label: "₹5,000", emoji: "💰" },
       { value: "₹10,000", label: "₹10,000", emoji: "💵" },
       { value: "₹25,000", label: "₹25,000", emoji: "🏆" },
       { value: "₹50,000+", label: "₹50,000+", emoji: "🚀" },
+    ],
+  },
+  {
+    id: 6,
+    title: "Have you ever landed a paying client before?",
+    description: "No judgment — this helps us know where to start your journey.",
+    options: [
+      { value: "never", label: "No, never", emoji: "🙅" },
+      { value: "once", label: "Yes, once or twice", emoji: "🙋" },
+      { value: "few", label: "Yes, a few times", emoji: "💼" },
+      { value: "regularly", label: "Yes, regularly", emoji: "🔥" },
+    ],
+  },
+  {
+    id: 7,
+    title: "Which platforms do you want to get clients from?",
+    description: "Your daily tasks will be platform-specific for maximum results.",
+    options: [
+      { value: "Upwork", label: "Upwork", emoji: "🟢" },
+      { value: "LinkedIn", label: "LinkedIn", emoji: "🔗" },
+      { value: "Instagram", label: "Instagram", emoji: "📸" },
+      { value: "Fiverr", label: "Fiverr", emoji: "🟢" },
+      { value: "Direct Outreach", label: "Direct Outreach", emoji: "📧" },
+      { value: "Not sure yet", label: "Not sure yet", emoji: "🤷" },
+    ],
+  },
+  {
+    id: 8,
+    title: "Do you already have a portfolio?",
+    description: "Even 1-2 sample projects count as a portfolio.",
+    options: [
+      { value: "no", label: "No portfolio yet", emoji: "📭" },
+      { value: "partial", label: "Working on it", emoji: "🔨" },
+      { value: "yes", label: "Yes, it's live", emoji: "✅" },
+    ],
+  },
+  {
+    id: 9,
+    title: "What is your biggest challenge right now?",
+    description: "Be honest — Dr. Business will address this directly in your plan.",
+    options: [
+      { value: "Finding clients", label: "Finding clients", emoji: "🔍" },
+      { value: "Pricing my work", label: "Pricing my work", emoji: "💲" },
+      { value: "Communication & proposals", label: "Writing proposals", emoji: "✍️" },
+      { value: "Staying consistent", label: "Staying consistent", emoji: "🎯" },
+      { value: "Building portfolio", label: "Building portfolio", emoji: "🗂️" },
+    ],
+  },
+  {
+    id: 10,
+    title: "How many hours daily do you spend on social media (scrolling)?",
+    description: "We'll help you turn passive scrolling time into active income activity.",
+    options: [
+      { value: "less than 1", label: "Less than 1 hour", emoji: "✅" },
+      { value: "1-2", label: "1–2 hours", emoji: "😐" },
+      { value: "3-4", label: "3–4 hours", emoji: "😬" },
+      { value: "5+", label: "5+ hours", emoji: "📵" },
     ],
   },
 ];
@@ -76,7 +135,7 @@ export default function OnboardingPage() {
 
   const step = steps[currentStep];
   const selected = answers[step?.id] ?? null;
-  const progress = ((currentStep) / steps.length) * 100;
+  const progress = (currentStep / steps.length) * 100;
 
   const handleSelect = (value: string) => {
     setAnswers((prev) => ({ ...prev, [step.id]: value }));
@@ -95,9 +154,14 @@ export default function OnboardingPage() {
             skill: answers[1],
             hoursPerDay: answers[2],
             experienceLevel: answers[3],
-            platforms: answers[4] === "Smartphone" ? ["Instagram", "Mobile"] : ["Upwork", "LinkedIn"],
-            incomeGoal: answers[5]
-          })
+            currentIncome: answers[4],
+            incomeGoal: answers[5],
+            hadClientBefore: answers[6] !== "never",
+            platforms: [answers[7]],
+            hasPortfolio: answers[8] === "yes",
+            biggestChallenge: answers[9],
+            dailySocialHours: answers[10],
+          }),
         });
       } catch (err) {
         console.error(err);
@@ -124,13 +188,13 @@ export default function OnboardingPage() {
             Your Plan is Ready! 🎉
           </h1>
           <p className="text-slate-400 mb-8">
-            Your personalized 30-Day Freelancer Launch Plan has been generated
-            based on your answers.
+            Dr. Business has built your personalized 30-day execution plan
+            based on your profile. Your daily tasks are waiting.
           </p>
 
           <div className="rounded-2xl border border-sky-400/20 bg-sky-400/10 p-6 mb-8 text-left">
             <p className="text-xs font-bold uppercase tracking-widest text-sky-400 mb-4">
-              Your Roadmap Summary
+              Your Profile Summary
             </p>
             <div className="space-y-2 text-sm text-slate-300">
               <div className="flex justify-between">
@@ -139,11 +203,19 @@ export default function OnboardingPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Daily commitment</span>
-                <span className="font-medium">{answers[2]}</span>
+                <span className="font-medium">{answers[2]} hr/day</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Experience</span>
                 <span className="font-medium">{answers[3]}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Platform focus</span>
+                <span className="font-medium">{answers[7]}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Biggest challenge</span>
+                <span className="font-medium">{answers[9]}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Income goal</span>
@@ -152,39 +224,34 @@ export default function OnboardingPage() {
             </div>
           </div>
 
-          {/* Roadmap timeline preview */}
           <div className="text-left mb-8">
             {[
-              { day: "Week 1", label: "Profile & Portfolio Setup", done: false },
-              { day: "Week 2", label: "Outreach & First Proposals", done: false },
-              { day: "Week 3", label: "Follow Up & Close", done: false },
-              { day: "Week 4", label: "Land First Client", done: false },
+              { week: "Week 1", label: "Profile & Portfolio Setup" },
+              { week: "Week 2", label: "Outreach & First Proposals" },
+              { week: "Week 3", label: "Follow Up & Close Deals" },
+              { week: "Week 4", label: "Land Your First Client" },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-4 mb-3">
                 <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 text-xs font-bold text-sky-400">
                   {i + 1}
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">{item.day}</p>
+                  <p className="text-xs text-slate-500">{item.week}</p>
                   <p className="text-sm text-white font-medium">{item.label}</p>
                 </div>
-                {i < 3 && (
-                  <div className="ml-3 h-0.5 flex-1 bg-sky-400/10" />
-                )}
               </div>
             ))}
           </div>
 
-          <Link href="/dashboard">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="w-full gap-2 text-base h-14 shadow-[0_0_40px_rgba(14,165,233,0.3)]"
-            >
-              Enter Your Dashboard
-              <ArrowRight size={18} />
-            </Button>
-          </Link>
+          <Button
+            size="lg"
+            variant="secondary"
+            className="w-full gap-2 text-base h-14 shadow-[0_0_40px_rgba(14,165,233,0.3)]"
+            onClick={() => router.push("/dashboard")}
+          >
+            Enter Your Dashboard
+            <ArrowRight size={18} />
+          </Button>
         </div>
       </div>
     );
@@ -240,7 +307,11 @@ export default function OnboardingPage() {
               disabled={!selected || isGenerating}
               className="gap-2 px-8 shadow-[0_0_30px_rgba(14,165,233,0.2)]"
             >
-              {isGenerating ? "Generating..." : currentStep === steps.length - 1 ? "Generate My Plan" : "Continue"}
+              {isGenerating
+                ? "Building your plan..."
+                : currentStep === steps.length - 1
+                ? "Generate My Plan 🚀"
+                : "Continue"}
               <ArrowRight size={16} />
             </Button>
           </div>
