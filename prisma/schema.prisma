@@ -63,6 +63,11 @@ model User {
   quickWinCompleted   Boolean   @default(false)
   quickWinCompletedAt DateTime?
 
+  // Dr. Business Score (Feature 5)
+  drBusinessScore Int    @default(0)
+  scoreLevel      String @default("Starter")
+  lastActiveAt    DateTime @default(now())
+
   // Relations
   accounts      Account[]
   sessions      Session[]
@@ -73,6 +78,8 @@ model User {
   messages      Message[]
   notifications Notification[]
   payments      Payment[]
+  leads         Lead[]
+  rateCache     RateCache[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -341,3 +348,43 @@ model Proposal {
   createdAt      DateTime @default(now())
 }
 
+// ─── CRM / Leads (Feature 3) ──────────────────────────────────────
+model Lead {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientName    String
+  platform      String
+  projectType   String?
+  description   String?   @db.Text
+  stage         LeadStage @default(PROSPECT)
+  lastContactAt DateTime  @default(now())
+  notes         String?   @db.Text
+  won           Boolean   @default(false)
+  wonAmount     Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum LeadStage {
+  PROSPECT
+  PROPOSAL_SENT
+  IN_CONVERSATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+// ─── Rate Cache (Feature 4) ────────────────────────────────────────
+model RateCache {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill          String
+  experience     String
+  platform       String
+  projectType    String
+  clientLocation String
+  result         Json
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+}

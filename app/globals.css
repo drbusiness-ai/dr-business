@@ -1,9 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
-  --background: #05070d;
-  --foreground: #f8fafc;
+  color-scheme: light;
+  --background: #FAFAF7;
+  --foreground: #1C1917;
+  --card: #FFFFFF;
+  --border: #E8E4DC;
+  --primary: #7C3AED;
+  --primary-light: #EDE9FE;
+  --accent: #F59E0B;
+  --accent-light: #FEF3C7;
+  --success: #059669;
+  --success-light: #D1FAE5;
+  --muted: #78716C;
+  --muted-bg: #F5F5F4;
 }
 
 * {
@@ -17,33 +27,59 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(14, 165, 233, 0.18), transparent 28rem),
-    radial-gradient(circle at 88% 12%, rgba(124, 58, 237, 0.16), transparent 30rem),
-    linear-gradient(180deg, #05070d 0%, #080b14 48%, #05070d 100%);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 ::selection {
-  background: rgba(56, 189, 248, 0.35);
+  background: rgba(124, 58, 237, 0.2);
 }
 
-.noise {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.14;
-  background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(to bottom, black, transparent 85%);
+/* Warm card shadow */
+.card-shadow {
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.08), 0 1px 2px rgba(28, 25, 23, 0.04);
 }
 
-.glass-line {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
-}
-
+/* Smooth scrollbar */
 .app-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+  scrollbar-color: #E8E4DC transparent;
+}
+
+/* XP float animation */
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+
+.xp-float {
+  animation: floatUp 1.2s ease-out forwards;
+}
+
+/* Confetti keyframe */
+@keyframes confettiFall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(60px) rotate(360deg); opacity: 0; }
+}
+
+/* Progress bar warm gradient */
+.progress-warm {
+  background: linear-gradient(90deg, #F59E0B, #7C3AED);
+}
+
+/* Warm glow on violet buttons */
+.btn-violet-glow:hover {
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+/* Kanban drag feedback */
+.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.drop-target {
+  border-color: #7C3AED !important;
+  background-color: #EDE9FE !important;
 }

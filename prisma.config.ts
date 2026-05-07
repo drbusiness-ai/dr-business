@@ -1,3 +1,9 @@
 import { defineConfig } from '@prisma/config';
+import * as dotenv from 'dotenv';
 
-export default defineConfig({});
+// Load env for CLI usage
+dotenv.config({ path: '.env.local' });
+
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+});

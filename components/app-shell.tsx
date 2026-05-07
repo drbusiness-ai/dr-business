@@ -3,25 +3,52 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Bell, Command, Flame, Menu, Sparkles, LayoutDashboard, CheckSquare, Target, Settings, MessageSquare, FileText } from "lucide-react";
+import {
+  Bell,
+  Flame,
+  Menu,
+  Sparkles,
+  LayoutDashboard,
+  CheckSquare,
+  Settings,
+  MessageSquare,
+  FileText,
+  Calculator,
+  Kanban,
+  TrendingUp,
+  X,
+  Archive,
+} from "lucide-react";
 import { cn } from "@/components/ui/utils";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Daily Tasks", href: "/tasks", icon: CheckSquare },
-  { label: "Proposals", href: "/proposals", icon: FileText },
   { label: "AI Coach", href: "/coach", icon: MessageSquare },
-  { label: "Progress", href: "/progress", icon: Target },
+  { label: "Proposals", href: "/proposals", icon: FileText },
+  { label: "Rate Calculator", href: "/rate-calculator", icon: Calculator },
+  { label: "My CRM", href: "/crm", icon: Kanban },
+  { label: "My Progress", href: "/progress", icon: TrendingUp },
+  { label: "Tool Vault", href: "/vault", icon: Archive },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-export function AppShell({ children, activePath }: { children: React.ReactNode; activePath?: string }) {
+export function AppShell({
+  children,
+  activePath,
+}: {
+  children: React.ReactNode;
+  activePath?: string;
+}) {
   const pathname = usePathname();
   const currentPath = activePath || pathname;
-  
-  const [user, setUser] = useState<any>({
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const [user, setUser] = useState<{
+    name?: string;
+    currentStreak?: number;
+    firstClientProgress?: number;
+  }>({
     name: "User",
     currentStreak: 0,
     firstClientProgress: 0,
@@ -36,78 +63,135 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
       .catch(() => {});
   }, []);
 
-  return (
-    <main className="min-h-screen">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-white/10 bg-slate-950/65 px-4 py-5 backdrop-blur-2xl lg:block">
-        <Link href="/" className="flex items-center gap-3 px-2">
-          <div className="grid size-10 place-items-center rounded-2xl bg-gradient-to-br from-sky-300 to-violet-500 text-slate-950">
-            <Sparkles size={20} />
-          </div>
-          <div>
-            <p className="font-semibold text-white">Dr. Business</p>
-            <p className="text-xs text-slate-400">Freelancer Launch OS</p>
-          </div>
-        </Link>
-
-        <nav className="mt-8 space-y-1">
-          {navItems.map((item) => {
-            const active = currentPath === item.href;
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-2xl px-3 py-3 text-sm transition",
-                  active
-                    ? "bg-white text-slate-950"
-                    : "text-slate-400 hover:bg-white/7 hover:text-white"
-                )}
-              >
-                <item.icon size={18} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="absolute bottom-5 left-4 right-4 rounded-2xl border border-sky-300/20 bg-sky-400/10 p-4">
-          <div className="flex items-center gap-2 text-sm font-medium text-white">
-            <Flame size={17} className="text-sky-300" />
-            {user.currentStreak}-day execution streak
-          </div>
-          <Progress value={user.firstClientProgress} className="mt-4 h-1.5" />
-          <p className="mt-3 text-xs leading-5 text-slate-400">
-            {user.firstClientProgress}% toward first freelance client.
-          </p>
+  const SidebarContent = () => (
+    <>
+      <Link
+        href="/"
+        className="flex items-center gap-3 px-2 mb-6"
+        onClick={() => setMobileOpen(false)}
+      >
+        <div className="grid size-10 place-items-center rounded-2xl bg-gradient-to-br from-violet-600 to-amber-400 text-white flex-shrink-0 shadow-md">
+          <Sparkles size={20} />
         </div>
+        <div>
+          <p className="font-bold text-[#1C1917] text-[15px]">Dr. Business</p>
+          <p className="text-xs text-[#78716C]">Freelancer Launch OS</p>
+        </div>
+      </Link>
+
+      <nav className="space-y-0.5 flex-1">
+        {navItems.map((item) => {
+          const active = currentPath === item.href;
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className={cn(
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                active
+                  ? "bg-violet-50 text-violet-700 border border-violet-200"
+                  : "text-[#78716C] hover:bg-[#F5F5F4] hover:text-[#1C1917]"
+              )}
+            >
+              <item.icon
+                size={16}
+                className={active ? "text-violet-600" : "text-[#A8A29E]"}
+              />
+              {item.label}
+              {active && (
+                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-violet-500" />
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Streak card at bottom */}
+      <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 p-4 mt-4">
+        <div className="flex items-center gap-2 text-sm font-semibold text-[#1C1917] mb-1">
+          <Flame size={15} className="text-orange-500" />
+          <span>{user.currentStreak ?? 0}-day streak 🔥</span>
+        </div>
+        <p className="text-xs text-[#78716C] mb-3">Keep the momentum going!</p>
+        <div className="h-1.5 rounded-full bg-[#E8E4DC] overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{
+              width: `${user.firstClientProgress ?? 0}%`,
+              background: "linear-gradient(90deg, #F59E0B, #7C3AED)",
+            }}
+          />
+        </div>
+        <p className="mt-2 text-xs text-[#78716C]">
+          {user.firstClientProgress ?? 0}% toward first client
+        </p>
+      </div>
+    </>
+  );
+
+  return (
+    <main className="min-h-screen bg-[#FAFAF7]">
+      {/* Desktop Sidebar */}
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-[#E8E4DC] bg-white px-4 py-5 lg:flex overflow-y-auto">
+        <SidebarContent />
       </aside>
 
-      <section className="lg:pl-72">
-        <header className="sticky top-0 z-20 border-b border-white/10 bg-slate-950/55 px-4 py-3 backdrop-blur-2xl sm:px-6">
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          />
+          <aside className="absolute inset-y-0 left-0 z-50 w-72 flex flex-col border-r border-[#E8E4DC] bg-white px-4 py-5 overflow-y-auto">
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-lg text-[#78716C] hover:bg-[#F5F5F4]"
+            >
+              <X size={16} />
+            </button>
+            <SidebarContent />
+          </aside>
+        </div>
+      )}
+
+      {/* Main section */}
+      <section className="lg:pl-64">
+        <header className="sticky top-0 z-20 border-b border-[#E8E4DC] bg-white/90 px-4 py-3 backdrop-blur-md sm:px-6">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="lg:hidden">
-                <Menu size={19} />
-              </Button>
+              <button
+                onClick={() => setMobileOpen(true)}
+                className="p-2 rounded-xl text-[#78716C] hover:bg-[#F5F5F4] lg:hidden"
+              >
+                <Menu size={20} />
+              </button>
               <div>
-                <p className="text-sm text-slate-400">Welcome back, {user.name || "Friend"}</p>
-                <h1 className="text-lg font-semibold text-white sm:text-xl">
-                  Today is for proof, outreach, and one clean win.
-                </h1>
+                <p className="text-sm text-[#78716C]">
+                  Welcome back, {user.name || "Friend"} 👋
+                </p>
+                <p className="text-base font-semibold text-[#1C1917] hidden sm:block">
+                  Build. Execute. Win. 🚀
+                </p>
               </div>
             </div>
-            <div className="hidden items-center gap-2 sm:flex">
-              <Button variant="outline" size="sm">
-                <Command size={15} />
-                Quick action
-              </Button>
-              <Button variant="ghost" size="icon">
+            <div className="flex items-center gap-2">
+              <button className="p-2 rounded-xl text-[#78716C] hover:bg-[#F5F5F4] transition-colors">
                 <Bell size={18} />
-              </Button>
+              </button>
+              <Link
+                href="/settings"
+                className="flex items-center justify-center size-8 rounded-full bg-violet-100 text-violet-700 text-sm font-bold border border-violet-200"
+              >
+                {(user.name || "U")[0].toUpperCase()}
+              </Link>
             </div>
           </div>
         </header>
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-8">{children}</div>
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-8">
+          {children}
+        </div>
       </section>
     </main>
   );
