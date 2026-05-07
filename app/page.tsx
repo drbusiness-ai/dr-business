@@ -494,7 +494,7 @@ function Pricing() {
             </ul>
             <Link href="/onboarding" className="block w-full">
               <Button
-                variant="default"
+                variant="primary"
                 className="w-full h-12 font-bold bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-600/20"
               >
                 Start Pro — 7 Days Free
