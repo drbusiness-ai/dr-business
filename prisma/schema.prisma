@@ -80,6 +80,7 @@ model User {
   payments      Payment[]
   leads         Lead[]
   rateCache     RateCache[]
+  contentIdeas  ContentIdea[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -387,4 +388,18 @@ model RateCache {
   result         Json
   createdAt      DateTime @default(now())
   expiresAt      DateTime
+}
+
+// ─── Content Ideas (Feature 5) ─────────────────────────────────────
+model ContentIdea {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform     String
+  type         String
+  hook         String
+  fullContent  String?  @db.Text
+  hashtags     String[]
+  used         Boolean  @default(false)
+  createdAt    DateTime @default(now())
 }

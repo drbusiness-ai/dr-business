@@ -18,6 +18,7 @@ import {
   TrendingUp,
   X,
   Archive,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/components/ui/utils";
 
@@ -28,7 +29,11 @@ const navItems = [
   { label: "Proposals", href: "/proposals", icon: FileText },
   { label: "Rate Calculator", href: "/rate-calculator", icon: Calculator },
   { label: "My CRM", href: "/crm", icon: Kanban },
-  { label: "My Progress", href: "/progress", icon: TrendingUp },
+  { label: "Content Ideas", href: "/content", icon: Sparkles },
+  { label: "My Score", href: "/score", icon: Trophy },
+  { label: "Skill Stack", href: "/skillstack", icon: TrendingUp },
+  { label: "Retainer Formula", href: "/retainer", icon: Archive },
+  { label: "I'm Stuck", href: "/unstuck", icon: X },
   { label: "Tool Vault", href: "/vault", icon: Archive },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
