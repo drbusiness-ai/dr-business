@@ -73,6 +73,7 @@ model User {
   messages      Message[]
   notifications Notification[]
   payments      Payment[]
+  rateCache     RateCache[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -341,3 +342,17 @@ model Proposal {
   createdAt      DateTime @default(now())
 }
 
+// ─── Rate Calculator ───────────────────────────────────────────────
+model RateCache {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill          String
+  experience     String
+  platform       String
+  projectType    String
+  clientLocation String
+  result         Json
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+}
