@@ -109,8 +109,8 @@ export default function CoachPage() {
   return (
     <AppShell activePath="/coach">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-white mb-1">AI Coach</h1>
-        <p className="text-slate-400">
+        <h1 className="text-3xl font-black text-[#1C1917] mb-1">AI Coach</h1>
+        <p className="text-[#78716C] font-medium">
           Your personal freelance strategist. Ask anything — get real answers.
         </p>
       </div>
@@ -118,13 +118,15 @@ export default function CoachPage() {
       <div className="grid lg:grid-cols-3 gap-6 h-[calc(100vh-280px)] min-h-[500px]">
         {/* Chat area */}
         <div className="lg:col-span-2 flex flex-col">
-          <Card className="flex-1 flex flex-col overflow-hidden">
+          <Card className="flex-1 flex flex-col overflow-hidden bg-white shadow-md">
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 app-scrollbar">
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 app-scrollbar bg-[#FAFAF7]">
               {messages.length === 0 && !isTyping && (
-                <div className="h-full flex flex-col items-center justify-center text-slate-500">
-                  <Bot size={48} className="mb-4 text-sky-500/20" />
-                  <p>Send a message to start your coaching session.</p>
+                <div className="h-full flex flex-col items-center justify-center text-[#78716C]">
+                  <div className="grid size-16 place-items-center rounded-2xl bg-violet-100 text-violet-500 mb-4 shadow-inner">
+                    <Bot size={32} />
+                  </div>
+                  <p className="font-bold">Send a message to start your coaching session.</p>
                 </div>
               )}
 
@@ -138,10 +140,10 @@ export default function CoachPage() {
                 >
                   <div
                     className={cn(
-                      "grid size-8 flex-shrink-0 place-items-center rounded-full",
+                      "grid size-8 flex-shrink-0 place-items-center rounded-full shadow-sm",
                       msg.role === "user"
-                        ? "bg-sky-400/20 text-sky-300"
-                        : "bg-violet-400/20 text-violet-300"
+                        ? "bg-[#1C1917] text-white"
+                        : "bg-gradient-to-br from-violet-600 to-amber-400 text-white"
                     )}
                   >
                     {msg.role === "user" ? (
@@ -152,16 +154,16 @@ export default function CoachPage() {
                   </div>
                   <div
                     className={cn(
-                      "max-w-[80%] rounded-2xl px-4 py-3",
+                      "max-w-[80%] rounded-2xl px-5 py-3.5 shadow-sm",
                       msg.role === "user"
-                        ? "bg-sky-500/20 text-white"
-                        : "bg-white/5 text-slate-200"
+                        ? "bg-[#1C1917] text-white rounded-tr-sm"
+                        : "bg-white border border-[#E8E4DC] text-[#1C1917] rounded-tl-sm"
                     )}
                   >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                    <p className="text-sm font-medium leading-relaxed whitespace-pre-wrap">
                       {msg.content}
                     </p>
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className={cn("mt-1.5 text-[10px] font-bold uppercase", msg.role === "user" ? "text-stone-400" : "text-[#A8A29E]")}>
                       {new Date(msg.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -173,15 +175,15 @@ export default function CoachPage() {
 
               {isTyping && (
                 <div className="flex gap-3">
-                  <div className="grid size-8 flex-shrink-0 place-items-center rounded-full bg-violet-400/20 text-violet-300">
+                  <div className="grid size-8 flex-shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-600 to-amber-400 text-white shadow-sm">
                     <Bot size={15} />
                   </div>
-                  <div className="rounded-2xl bg-white/5 px-4 py-3">
+                  <div className="rounded-2xl rounded-tl-sm bg-white border border-[#E8E4DC] px-5 py-4 shadow-sm">
                     <div className="flex gap-1.5 items-center h-5">
                       {[0, 1, 2].map((i) => (
                         <div
                           key={i}
-                          className="h-2 w-2 rounded-full bg-slate-500 animate-bounce"
+                          className="h-2 w-2 rounded-full bg-violet-400 animate-bounce"
                           style={{ animationDelay: `${i * 0.15}s` }}
                         />
                       ))}
@@ -193,7 +195,7 @@ export default function CoachPage() {
             </div>
 
             {/* Input */}
-            <div className="border-t border-white/10 p-4 flex gap-3">
+            <div className="border-t border-[#E8E4DC] bg-white p-4 flex gap-3">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -201,16 +203,16 @@ export default function CoachPage() {
                   e.key === "Enter" && !e.shiftKey && sendMessage(input)
                 }
                 placeholder="Ask your AI coach anything..."
-                className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-sky-400/40 focus:ring-1 focus:ring-sky-400/20"
+                className="flex-1 rounded-xl border-2 border-[#E8E4DC] bg-[#FAFAF7] px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] font-medium outline-none focus:border-violet-300 focus:bg-white transition-all"
                 disabled={isTyping || !user}
               />
               <Button
-                variant="secondary"
                 size="icon"
                 onClick={() => sendMessage(input)}
                 disabled={!input.trim() || isTyping || !user}
+                className="size-12 rounded-xl bg-violet-600 hover:bg-violet-700 text-white shadow-md flex-shrink-0"
               >
-                <Send size={16} />
+                <Send size={18} />
               </Button>
             </div>
           </Card>
@@ -218,36 +220,36 @@ export default function CoachPage() {
 
         {/* Context panel */}
         <div className="space-y-4">
-          <Card className="p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles size={16} className="text-violet-400" />
-              <p className="text-xs font-bold uppercase tracking-widest text-violet-400">
+          <Card className="p-6 bg-white border-[#E8E4DC] shadow-sm">
+            <div className="flex items-center gap-2 mb-5">
+              <Sparkles size={18} className="text-amber-500" />
+              <p className="text-xs font-black uppercase tracking-widest text-[#1C1917]">
                 Your Context
               </p>
             </div>
             {!user ? (
               <div className="flex justify-center py-4">
-                <Loader2 className="w-5 h-5 text-slate-500 animate-spin" />
+                <Loader2 className="w-6 h-6 text-violet-400 animate-spin" />
               </div>
             ) : (
-              <div className="space-y-2 text-sm">
+              <div className="space-y-3 text-sm">
                 {[
                   ["Skill", user.skill],
                   ["Goal", user.incomeGoal + " in 30 days"],
                   ["Streak", `🔥 ${user.currentStreak} days`],
                   ["Level", `Level ${user.level}`],
                 ].map(([k, v]) => (
-                  <div key={k} className="flex justify-between">
-                    <span className="text-slate-500">{k}</span>
-                    <span className="text-white font-medium">{v}</span>
+                  <div key={k} className="flex justify-between items-center py-2 border-b border-[#F5F5F4] last:border-0 last:pb-0">
+                    <span className="text-[#78716C] font-medium">{k}</span>
+                    <span className="text-[#1C1917] font-bold bg-[#FAFAF7] px-2 py-1 rounded-lg border border-[#E8E4DC]">{v}</span>
                   </div>
                 ))}
               </div>
             )}
           </Card>
 
-          <Card className="p-5">
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
+          <Card className="p-6 bg-white border-[#E8E4DC] shadow-sm">
+            <p className="text-xs font-black uppercase tracking-widest text-[#1C1917] mb-4">
               Suggested Prompts
             </p>
             <div className="space-y-2">
@@ -256,7 +258,7 @@ export default function CoachPage() {
                   key={prompt}
                   onClick={() => sendMessage(prompt)}
                   disabled={isTyping || !user}
-                  className="w-full rounded-xl border border-white/8 bg-white/3 px-3 py-2.5 text-left text-xs text-slate-300 hover:border-sky-400/30 hover:bg-sky-400/5 hover:text-white transition-all disabled:opacity-50"
+                  className="w-full rounded-xl border-2 border-[#E8E4DC] bg-[#FAFAF7] px-4 py-3 text-left text-sm font-semibold text-[#78716C] hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 transition-all disabled:opacity-50"
                 >
                   {prompt}
                 </button>

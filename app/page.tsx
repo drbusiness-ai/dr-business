@@ -1,47 +1,44 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowRight,
   CheckCircle2,
   Sparkles,
-  Play,
   Flame,
   ChevronDown,
   ChevronUp,
   Zap,
   Target,
-  Users,
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { testimonials, faqs } from "@/lib/mock-data";
-import { useEffect } from "react";
 
 // ─── Navbar ────────────────────────────────────────────────────────────────
 function Navbar() {
   return (
-    <nav className="fixed top-0 z-50 w-full border-b border-white/8 bg-slate-950/70 backdrop-blur-2xl">
+    <nav className="fixed top-0 z-50 w-full border-b border-stone-200 bg-white/80 backdrop-blur-2xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-sky-300 to-violet-500 text-slate-950">
+          <div className="grid size-9 place-items-center rounded-xl bg-violet-100 text-violet-600">
             <Sparkles size={18} />
           </div>
-          <span className="font-bold text-white text-lg">Dr. Business</span>
+          <span className="font-bold text-stone-900 text-lg">Dr. Business</span>
         </Link>
-        <div className="hidden sm:flex items-center gap-6 text-sm text-slate-400">
-          <a href="#how-it-works" className="hover:text-white transition-colors">How it works</a>
-          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-          <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+        <div className="hidden sm:flex items-center gap-6 text-sm font-medium text-stone-500">
+          <a href="#how-it-works" className="hover:text-stone-900 transition-colors">How it works</a>
+          <a href="#pricing" className="hover:text-stone-900 transition-colors">Pricing</a>
+          <a href="#faq" className="hover:text-stone-900 transition-colors">FAQ</a>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/dashboard">
-            <Button variant="ghost" size="sm">Sign in</Button>
+          <Link href="/login">
+            <Button variant="ghost" size="sm" className="font-semibold text-stone-600 hover:text-stone-900">Sign in</Button>
           </Link>
           <Link href="/onboarding">
-            <Button variant="secondary" size="sm">Get Started Free</Button>
+            <Button variant="secondary" size="sm" className="font-semibold">Get Started Free</Button>
           </Link>
         </div>
       </div>
@@ -52,21 +49,21 @@ function Navbar() {
 // ─── Hero ──────────────────────────────────────────────────────────────────
 function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-24 px-6">
+    <section className="relative overflow-hidden pt-32 pb-24 px-6 bg-[#FAFAF7]">
       <div className="mx-auto max-w-4xl text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-4 py-1.5 text-xs text-sky-300 mb-8">
-          <Flame size={13} className="text-orange-400" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-semibold text-amber-700 mb-8">
+          <Flame size={14} className="text-amber-500" />
           <span>2,400+ freelancers earning their first ₹10K+ this month</span>
         </div>
 
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.08] tracking-tight mb-6">
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-stone-900 leading-[1.08] tracking-tight mb-6">
           Stop Watching Gurus.{" "}
-          <span className="bg-gradient-to-r from-sky-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">
             Start Building Income.
           </span>
         </h1>
 
-        <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+        <p className="text-xl text-stone-600 font-medium max-w-2xl mx-auto leading-relaxed mb-10">
           Dr. Business gives you a personalized daily execution system to land
           your first freelance client — in 30 days or less.
         </p>
@@ -76,19 +73,19 @@ function Hero() {
 
       {/* Floating dashboard preview */}
       <div className="mx-auto mt-20 max-w-5xl px-4">
-        <div className="rounded-2xl border border-white/10 bg-slate-950/80 p-1 shadow-[0_40px_120px_rgba(14,165,233,0.12)] backdrop-blur-xl">
-          <div className="rounded-xl bg-slate-950 p-6">
+        <div className="rounded-2xl border border-stone-200 bg-white p-1 shadow-xl shadow-stone-200/50">
+          <div className="rounded-xl bg-[#FAFAF7] p-6">
             <div className="flex items-center gap-2 mb-4">
-              <div className="h-3 w-3 rounded-full bg-red-500/60" />
-              <div className="h-3 w-3 rounded-full bg-amber-500/60" />
-              <div className="h-3 w-3 rounded-full bg-emerald-500/60" />
+              <div className="h-3 w-3 rounded-full bg-red-400" />
+              <div className="h-3 w-3 rounded-full bg-amber-400" />
+              <div className="h-3 w-3 rounded-full bg-emerald-400" />
             </div>
             <div className="grid grid-cols-3 gap-3 mb-4">
               {["🔥 7-day streak", "✅ 23 tasks done", "📤 5 proposals"].map(
                 (m) => (
                   <div
                     key={m}
-                    className="rounded-xl border border-white/8 bg-white/3 p-3 text-xs text-slate-300"
+                    className="rounded-xl border border-stone-200 bg-white p-3 text-xs font-medium text-stone-600 shadow-sm"
                   >
                     {m}
                   </div>
@@ -103,20 +100,20 @@ function Hero() {
               ].map((task) => (
                 <div
                   key={task.t}
-                  className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/2 px-4 py-3"
+                  className="flex items-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm"
                 >
                   <div
-                    className={`size-5 rounded-full border-2 ${task.done ? "bg-sky-400 border-sky-400" : "border-white/20"} flex items-center justify-center`}
+                    className={`size-5 rounded-full border-2 ${task.done ? "bg-violet-600 border-violet-600" : "border-stone-300"} flex items-center justify-center`}
                   >
-                    {task.done && <CheckCircle2 size={12} className="text-slate-950" />}
+                    {task.done && <CheckCircle2 size={12} className="text-white" />}
                   </div>
                   <span
-                    className={`flex-1 text-sm ${task.done ? "line-through text-slate-500" : "text-slate-300"}`}
+                    className={`flex-1 text-sm font-medium ${task.done ? "line-through text-stone-400" : "text-stone-700"}`}
                   >
                     {task.t}
                   </span>
                   <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${task.p === "High" ? "bg-red-500/15 text-red-400" : "bg-amber-500/15 text-amber-400"}`}
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${task.p === "High" ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-600"}`}
                   >
                     {task.p}
                   </span>
@@ -169,12 +166,12 @@ function WaitlistForm() {
 
   if (status === "success") {
     return (
-      <div className="mx-auto max-w-md p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center animate-in fade-in zoom-in duration-500">
-        <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+      <div className="mx-auto max-w-md p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center animate-in fade-in zoom-in duration-500">
+        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-6 h-6 text-emerald-600" />
         </div>
-        <h3 className="text-xl font-bold text-white mb-2">You&apos;re on the list!</h3>
-        <p className="text-emerald-200">You are #{position} in line. Keep an eye on your inbox.</p>
+        <h3 className="text-xl font-bold text-stone-900 mb-2">You&apos;re on the list!</h3>
+        <p className="text-emerald-700 font-medium">You are #{position} in line. Keep an eye on your inbox.</p>
       </div>
     );
   }
@@ -189,23 +186,23 @@ function WaitlistForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email address"
             required
-            className="w-full h-14 pl-6 pr-32 bg-[#111118] border border-slate-700 focus:border-sky-500/50 rounded-full text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-4 focus:ring-sky-500/10 transition-all shadow-[0_0_30px_rgba(14,165,233,0.1)]"
+            className="w-full h-14 pl-6 pr-32 bg-white border-2 border-stone-200 focus:border-violet-500 rounded-full text-stone-900 font-medium placeholder:text-stone-400 focus:outline-none focus:ring-4 focus:ring-violet-500/10 transition-all shadow-sm"
           />
           <Button
             type="submit"
             disabled={status === "loading"}
-            className="absolute right-1.5 h-11 px-6 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold transition-all disabled:opacity-50"
+            className="absolute right-1.5 h-11 px-6 rounded-full bg-violet-600 hover:bg-violet-700 text-white font-bold transition-all disabled:opacity-50"
           >
             {status === "loading" ? "Joining..." : "Join Waitlist"}
           </Button>
         </div>
         {status === "error" && (
-          <p className="text-red-400 text-sm mt-1">Something went wrong. Please try again.</p>
+          <p className="text-red-500 font-medium text-sm mt-1">Something went wrong. Please try again.</p>
         )}
       </form>
-      <p className="mt-4 text-sm text-slate-500 flex items-center justify-center gap-2">
+      <p className="mt-4 text-sm font-medium text-stone-500 flex items-center justify-center gap-2">
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="font-semibold text-slate-300">{count.toLocaleString()}</span> freelancers already joined
+        <span className="font-bold text-stone-700">{count.toLocaleString()}</span> freelancers already joined
       </p>
     </div>
   );
@@ -227,25 +224,25 @@ function WinsFeedSection() {
   if (wins.length === 0) return null;
 
   return (
-    <section className="py-12 border-y border-white/8 bg-slate-950/50 overflow-hidden">
+    <section className="py-12 border-y border-stone-200 bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-6">
-        <p className="text-center text-xs text-sky-400 font-semibold uppercase tracking-widest mb-8 flex items-center justify-center gap-2">
-          <Flame size={14} className="text-orange-400" /> Live Execution Feed
+        <p className="text-center text-xs text-amber-600 font-bold uppercase tracking-widest mb-8 flex items-center justify-center gap-2">
+          <Flame size={16} className="text-amber-500" /> Live Execution Feed
         </p>
         <div className="flex gap-6 animate-[scroll_40s_linear_infinite] w-max hover:[animation-play-state:paused]">
           {[...wins, ...wins].map((win, i) => (
-            <div key={i} className="flex-shrink-0 w-[300px] rounded-2xl bg-[#111118] border border-white/5 p-4 shadow-xl">
+            <div key={i} className="flex-shrink-0 w-[300px] rounded-2xl bg-[#FAFAF7] border border-stone-200 p-4 shadow-sm">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-amber-500 flex items-center justify-center text-xs font-bold text-white shadow-sm">
                   {win.userName.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-200">{win.userName}</p>
-                  <p className="text-xs text-slate-500">{win.userSkill}</p>
+                  <p className="text-sm font-bold text-stone-900">{win.userName}</p>
+                  <p className="text-xs font-medium text-stone-500">{win.userSkill}</p>
                 </div>
               </div>
-              <p className="text-sm text-slate-300 mt-2">
-                <span className="text-emerald-400 font-medium mr-1">{win.winType}</span>
+              <p className="text-sm text-stone-700 mt-2 font-medium">
+                <span className="text-emerald-600 font-bold mr-1">{win.winType}</span>
                 {win.winText}
               </p>
             </div>
@@ -262,14 +259,14 @@ function SocialProof() {
     "Upwork", "Fiverr", "LinkedIn", "Toptal", "Freelancer.com", "99designs",
   ];
   return (
-    <section className="border-y border-white/8 py-6 px-6">
+    <section className="border-b border-stone-200 bg-[#FAFAF7] py-8 px-6">
       <div className="mx-auto max-w-5xl">
-        <p className="text-center text-xs text-slate-500 uppercase tracking-widest mb-6">
+        <p className="text-center text-xs font-bold text-stone-400 uppercase tracking-widest mb-6">
           Our users land clients on
         </p>
         <div className="flex flex-wrap items-center justify-center gap-8">
           {platforms.map((p) => (
-            <span key={p} className="text-slate-500 font-semibold text-sm">
+            <span key={p} className="text-stone-400 font-bold text-sm tracking-wide">
               {p}
             </span>
           ))}
@@ -305,24 +302,24 @@ function Problem() {
   ];
 
   return (
-    <section className="py-24 px-6" id="problem">
+    <section className="py-24 px-6 bg-white" id="problem">
       <div className="mx-auto max-w-5xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl font-extrabold text-stone-900 mb-4 tracking-tight">
             Why most people{" "}
-            <span className="text-red-400">never earn online</span>
+            <span className="text-red-500">never earn online</span>
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto">
+          <p className="text-stone-500 font-medium max-w-xl mx-auto text-lg">
             It&apos;s not a lack of talent. It&apos;s a lack of system. Here&apos;s what&apos;s
             really happening:
           </p>
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-6">
           {problems.map((p) => (
-            <Card key={p.title} className="p-6">
-              <span className="text-3xl mb-3 block">{p.icon}</span>
-              <h3 className="font-semibold text-white mb-2">{p.title}</h3>
-              <p className="text-sm text-slate-400">{p.desc}</p>
+            <Card key={p.title} className="p-6 bg-[#FAFAF7] border-stone-200 shadow-sm">
+              <span className="text-3xl mb-4 block">{p.icon}</span>
+              <h3 className="font-bold text-stone-900 mb-2 text-lg">{p.title}</h3>
+              <p className="text-sm font-medium text-stone-500 leading-relaxed">{p.desc}</p>
             </Card>
           ))}
         </div>
@@ -336,46 +333,49 @@ function HowItWorks() {
   const steps = [
     {
       num: "01",
-      icon: <Target size={24} className="text-sky-300" />,
+      icon: <Target size={28} className="text-violet-600" />,
       title: "Build your personalized plan",
       desc: "Answer 5 questions about your skill, time, and goals. Dr. Business generates your custom 30-day roadmap in seconds.",
+      bg: "bg-violet-100"
     },
     {
       num: "02",
-      icon: <CheckCircle2 size={24} className="text-emerald-300" />,
+      icon: <CheckCircle2 size={28} className="text-amber-600" />,
       title: "Execute daily tasks",
       desc: "Every morning, 3–5 high-leverage tasks await you. No decision fatigue — just open the app and start.",
+      bg: "bg-amber-100"
     },
     {
       num: "03",
-      icon: <Zap size={24} className="text-amber-300" />,
+      icon: <Zap size={28} className="text-emerald-600" />,
       title: "Land your first client",
       desc: "Follow the system. Your AI coach guides every step. Most users land their first client in 21–30 days.",
+      bg: "bg-emerald-100"
     },
   ];
 
   return (
-    <section className="py-24 px-6 bg-gradient-to-b from-transparent to-sky-950/20" id="how-it-works">
+    <section className="py-24 px-6 bg-[#FAFAF7] border-y border-stone-200" id="how-it-works">
       <div className="mx-auto max-w-5xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl font-extrabold text-stone-900 mb-4 tracking-tight">
             How Dr. Business works
           </h2>
-          <p className="text-slate-400">
+          <p className="text-stone-500 font-medium text-lg">
             A 3-step system designed for real execution, not passive learning.
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((s) => (
             <div key={s.num} className="text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+              <div className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl ${s.bg} shadow-sm`}>
                 {s.icon}
               </div>
-              <div className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">
+              <div className="text-xs font-extrabold text-stone-400 mb-3 uppercase tracking-widest">
                 Step {s.num}
               </div>
-              <h3 className="font-bold text-white text-lg mb-3">{s.title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{s.desc}</p>
+              <h3 className="font-bold text-stone-900 text-xl mb-3">{s.title}</h3>
+              <p className="text-sm font-medium text-stone-500 leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -387,32 +387,32 @@ function HowItWorks() {
 // ─── Testimonials ──────────────────────────────────────────────────────────
 function Testimonials() {
   return (
-    <section className="py-24 px-6">
+    <section className="py-24 px-6 bg-white">
       <div className="mx-auto max-w-5xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl font-extrabold text-stone-900 mb-4 tracking-tight">
             Real users. Real income.
           </h2>
-          <p className="text-slate-400">Not theory. Not hype. Execution results.</p>
+          <p className="text-stone-500 font-medium text-lg">Not theory. Not hype. Execution results.</p>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {testimonials.map((t) => (
-            <Card key={t.id} className="p-6 flex flex-col gap-4">
+            <Card key={t.id} className="p-6 flex flex-col gap-5 border-stone-200 bg-[#FAFAF7] shadow-sm">
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} className="fill-amber-400 text-amber-400" />
+                  <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-sm text-slate-300 leading-relaxed flex-1">
+              <p className="text-sm font-medium text-stone-700 leading-relaxed flex-1">
                 &ldquo;{t.content}&rdquo;
               </p>
-              <div className="flex items-center gap-3">
-                <div className="grid size-10 place-items-center rounded-full bg-gradient-to-br from-sky-400 to-violet-500 text-xs font-bold text-white">
+              <div className="flex items-center gap-3 pt-4 border-t border-stone-200">
+                <div className="grid size-10 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-amber-500 text-xs font-bold text-white shadow-sm">
                   {t.avatar}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white">{t.name}</p>
-                  <p className="text-xs text-emerald-400">{t.role}</p>
+                  <p className="text-sm font-bold text-stone-900">{t.name}</p>
+                  <p className="text-xs font-semibold text-emerald-600">{t.role}</p>
                 </div>
               </div>
             </Card>
@@ -426,23 +426,23 @@ function Testimonials() {
 // ─── Pricing ──────────────────────────────────────────────────────────────
 function Pricing() {
   return (
-    <section className="py-24 px-6" id="pricing">
-      <div className="mx-auto max-w-3xl">
+    <section className="py-24 px-6 bg-[#FAFAF7] border-y border-stone-200" id="pricing">
+      <div className="mx-auto max-w-4xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl font-extrabold text-stone-900 mb-4 tracking-tight">
             Simple, honest pricing
           </h2>
-          <p className="text-slate-400">Start free. Upgrade when you&apos;re ready.</p>
+          <p className="text-stone-500 font-medium text-lg">Start free. Upgrade when you&apos;re ready.</p>
         </div>
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 gap-8">
           {/* Free */}
-          <Card className="p-8">
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+          <Card className="p-8 border-stone-200 bg-white shadow-sm">
+            <p className="text-xs font-extrabold uppercase tracking-widest text-stone-400 mb-4">
               Free
             </p>
-            <p className="text-5xl font-bold text-white mb-1">₹0</p>
-            <p className="text-slate-400 text-sm mb-8">Forever free, no card needed</p>
-            <ul className="space-y-3 mb-8">
+            <p className="text-5xl font-extrabold text-stone-900 mb-2">₹0</p>
+            <p className="text-stone-500 font-medium text-sm mb-8">Forever free, no card needed</p>
+            <ul className="space-y-4 mb-10">
               {[
                 "Personalized 30-day roadmap",
                 "5 daily tasks",
@@ -450,52 +450,52 @@ function Pricing() {
                 "Tool vault access",
                 "Progress tracker",
               ].map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
-                  <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
+                <li key={f} className="flex items-start gap-3 text-sm font-medium text-stone-700">
+                  <CheckCircle2 size={18} className="text-emerald-500 flex-shrink-0 mt-0.5" />
                   {f}
                 </li>
               ))}
             </ul>
-            <Link href="/onboarding">
-              <Button variant="outline" className="w-full">
+            <Link href="/onboarding" className="block w-full">
+              <Button variant="outline" className="w-full h-12 font-bold text-stone-700 border-2">
                 Get Started Free
               </Button>
             </Link>
           </Card>
 
           {/* Pro */}
-          <Card className="p-8 border-sky-400/30 bg-gradient-to-br from-sky-400/10 to-violet-400/5 relative overflow-hidden">
-            <div className="absolute top-4 right-4 rounded-full bg-sky-400 px-3 py-1 text-xs font-bold text-slate-950">
+          <Card className="p-8 border-violet-200 bg-violet-50 relative overflow-hidden shadow-md">
+            <div className="absolute top-5 right-5 rounded-full bg-violet-600 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-white shadow-sm">
               Most Popular
             </div>
-            <p className="text-xs font-bold uppercase tracking-widest text-sky-400 mb-4">
+            <p className="text-xs font-extrabold uppercase tracking-widest text-violet-600 mb-4">
               Pro
             </p>
-            <p className="text-5xl font-bold text-white mb-1">
+            <p className="text-5xl font-extrabold text-stone-900 mb-2">
               ₹499
-              <span className="text-lg text-slate-400 font-normal">/mo</span>
+              <span className="text-lg text-stone-500 font-medium">/mo</span>
             </p>
-            <p className="text-slate-400 text-sm mb-8">Cancel anytime</p>
-            <ul className="space-y-3 mb-8">
+            <p className="text-stone-500 font-medium text-sm mb-8">Cancel anytime</p>
+            <ul className="space-y-4 mb-10">
               {[
                 "Everything in Free",
                 "Unlimited AI coach messages",
                 "Advanced execution analytics",
                 "Client email scripts",
-                "Proposal templates",
-                "Priority support",
-                "Early access to new features",
+                "Proposal AI Builder",
+                "CRM Kanban Board",
+                "Rate Calculator",
               ].map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-slate-300">
-                  <CheckCircle2 size={15} className="text-sky-400 flex-shrink-0" />
+                <li key={f} className="flex items-start gap-3 text-sm font-medium text-stone-900">
+                  <CheckCircle2 size={18} className="text-violet-600 flex-shrink-0 mt-0.5" />
                   {f}
                 </li>
               ))}
             </ul>
-            <Link href="/onboarding">
+            <Link href="/onboarding" className="block w-full">
               <Button
-                variant="secondary"
-                className="w-full shadow-[0_0_30px_rgba(14,165,233,0.25)]"
+                variant="primary"
+                className="w-full h-12 font-bold bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-600/20"
               >
                 Start Pro — 7 Days Free
               </Button>
@@ -512,30 +512,30 @@ function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section className="py-24 px-6" id="faq">
+    <section className="py-24 px-6 bg-white" id="faq">
       <div className="mx-auto max-w-3xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl font-extrabold text-stone-900 mb-4 tracking-tight">
             Frequently asked questions
           </h2>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {faqs.map((faq, i) => (
-            <Card key={i} className="overflow-hidden">
+            <Card key={i} className="overflow-hidden border-stone-200 bg-[#FAFAF7] shadow-sm">
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                className="flex w-full items-center justify-between p-6 text-left"
+                className="flex w-full items-center justify-between p-6 text-left hover:bg-stone-50 transition-colors"
               >
-                <span className="font-medium text-white text-sm">{faq.q}</span>
+                <span className="font-bold text-stone-900 text-[15px]">{faq.q}</span>
                 {open === i ? (
-                  <ChevronUp size={18} className="text-slate-400 flex-shrink-0" />
+                  <ChevronUp size={20} className="text-stone-400 flex-shrink-0" />
                 ) : (
-                  <ChevronDown size={18} className="text-slate-400 flex-shrink-0" />
+                  <ChevronDown size={20} className="text-stone-400 flex-shrink-0" />
                 )}
               </button>
               {open === i && (
-                <div className="px-6 pb-6">
-                  <p className="text-sm text-slate-400 leading-relaxed">{faq.a}</p>
+                <div className="px-6 pb-6 pt-2">
+                  <p className="text-sm font-medium text-stone-600 leading-relaxed">{faq.a}</p>
                 </div>
               )}
             </Card>
@@ -549,33 +549,33 @@ function FAQ() {
 // ─── CTA Footer ───────────────────────────────────────────────────────────
 function CTAFooter() {
   return (
-    <section className="py-24 px-6 text-center border-t border-white/8">
+    <section className="py-24 px-6 text-center border-t border-stone-200 bg-[#FAFAF7]">
       <div className="mx-auto max-w-2xl">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-300 to-violet-500">
-          <Sparkles size={28} className="text-slate-950" />
+        <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-violet-100 to-amber-100 shadow-inner">
+          <Sparkles size={36} className="text-violet-600" />
         </div>
-        <h2 className="text-4xl font-bold text-white mb-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-stone-900 mb-6 tracking-tight">
           Your first client is 30 days away.
         </h2>
-        <p className="text-slate-400 mb-10">
+        <p className="text-stone-500 font-medium text-lg mb-10 max-w-xl mx-auto">
           Stop waiting for the perfect moment. The system is ready. You just
           need to start.
         </p>
-        <Link href="/onboarding">
+        <Link href="/onboarding" className="inline-block">
           <Button
             size="lg"
             variant="secondary"
-            className="gap-2 text-base h-14 px-10 shadow-[0_0_60px_rgba(14,165,233,0.3)]"
+            className="gap-3 text-base font-bold h-14 px-10 shadow-lg shadow-amber-500/20"
           >
             Start Your 30-Day Plan
-            <ArrowRight size={18} />
+            <ArrowRight size={20} />
           </Button>
         </Link>
-        <p className="mt-5 text-sm text-slate-500">
+        <p className="mt-6 text-sm font-bold text-stone-400">
           Free · No card required · Takes 3 minutes
         </p>
       </div>
-      <div className="mt-16 border-t border-white/8 pt-8 text-xs text-slate-600">
+      <div className="mt-20 border-t border-stone-200 pt-8 text-xs font-bold text-stone-400">
         © 2026 Dr. Business. All rights reserved. · Stop consuming. Start executing.
       </div>
     </section>
@@ -585,7 +585,7 @@ function CTAFooter() {
 // ─── Main Page ─────────────────────────────────────────────────────────────
 export default function LandingPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <Navbar />
       <Hero />
       <WinsFeedSection />

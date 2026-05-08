@@ -16,6 +16,11 @@ export const authConfig = {
         "/progress",
         "/settings",
         "/onboarding",
+        "/quickwin",
+        "/proposals",
+        "/rate-calculator",
+        "/crm",
+        "/admin",
       ];
 
       const isProtectedRoute = protectedRoutes.some((route) =>
@@ -29,5 +34,5 @@ export const authConfig = {
       return true;
     },
   },
-  providers: [], // Add providers with an empty array for now
+  providers: [], // Providers added in auth.ts
 } satisfies NextAuthConfig;
