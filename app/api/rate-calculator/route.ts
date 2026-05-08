@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import OpenAI from "openai";
@@ -11,13 +11,13 @@ function getOpenAI(): OpenAI | null {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { skill, experience, platform, projectType, clientLocation } = await req.json();
 
   if (!skill || !experience || !platform || !projectType || !clientLocation) {
-    return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
+    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
   try {
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (existingCache) {
-      return Response.json(existingCache.result);
+      return NextResponse.json(existingCache.result);
     }
 
     // 2. Call AI
@@ -99,9 +99,9 @@ Return ONLY a valid JSON object matching exactly this structure:
       }
     });
 
-    return Response.json(result);
+    return NextResponse.json(result);
   } catch (error) {
     console.error("[Rate Calculator API] Error:", error);
-    return new Response(JSON.stringify({ error: "Failed to calculate rate" }), { status: 500 });
+    return NextResponse.json({ error: "Failed to calculate rate" }, { status: 500 });
   }
 }

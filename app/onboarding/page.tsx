@@ -178,48 +178,48 @@ export default function OnboardingPage() {
 
   if (showResult) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6 py-16">
+      <div className="min-h-screen bg-[#FAFAF7] flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-lg text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-sky-300 to-violet-500">
-            <Sparkles size={36} className="text-slate-950" />
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-violet-200 to-violet-400">
+            <Sparkles size={36} className="text-white" />
           </div>
 
-          <h1 className="text-4xl font-bold text-white mb-3">
+          <h1 className="text-4xl font-bold text-[#1C1917] mb-3">
             Your Plan is Ready! 🎉
           </h1>
-          <p className="text-slate-400 mb-8">
+          <p className="text-[#78716C] mb-8">
             Dr. Business has built your personalized 30-day execution plan
             based on your profile. Your daily tasks are waiting.
           </p>
 
-          <div className="rounded-2xl border border-sky-400/20 bg-sky-400/10 p-6 mb-8 text-left">
-            <p className="text-xs font-bold uppercase tracking-widest text-sky-400 mb-4">
+          <div className="rounded-2xl border border-violet-200 bg-violet-50 p-6 mb-8 text-left">
+            <p className="text-xs font-bold uppercase tracking-widest text-violet-600 mb-4">
               Your Profile Summary
             </p>
-            <div className="space-y-2 text-sm text-slate-300">
+            <div className="space-y-2 text-sm text-[#78716C]">
               <div className="flex justify-between">
-                <span className="text-slate-500">Skill</span>
-                <span className="font-medium">{answers[1]}</span>
+                <span>Skill</span>
+                <span className="font-semibold text-[#1C1917]">{answers[1]}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Daily commitment</span>
-                <span className="font-medium">{answers[2]} hr/day</span>
+                <span>Daily commitment</span>
+                <span className="font-semibold text-[#1C1917]">{answers[2]} hr/day</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Experience</span>
-                <span className="font-medium">{answers[3]}</span>
+                <span>Experience</span>
+                <span className="font-semibold text-[#1C1917]">{answers[3]}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Platform focus</span>
-                <span className="font-medium">{answers[7]}</span>
+                <span>Platform focus</span>
+                <span className="font-semibold text-[#1C1917]">{answers[7]}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Biggest challenge</span>
-                <span className="font-medium">{answers[9]}</span>
+                <span>Biggest challenge</span>
+                <span className="font-semibold text-[#1C1917]">{answers[9]}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Income goal</span>
-                <span className="font-medium text-emerald-400">{answers[5]}</span>
+                <span>Income goal</span>
+                <span className="font-semibold text-emerald-600">{answers[5]}</span>
               </div>
             </div>
           </div>
@@ -232,12 +232,12 @@ export default function OnboardingPage() {
               { week: "Week 4", label: "Land Your First Client" },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-4 mb-3">
-                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 text-xs font-bold text-sky-400">
+                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-violet-200 bg-white text-xs font-bold text-violet-600">
                   {i + 1}
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">{item.week}</p>
-                  <p className="text-sm text-white font-medium">{item.label}</p>
+                  <p className="text-xs text-[#A8A29E]">{item.week}</p>
+                  <p className="text-sm text-[#1C1917] font-semibold">{item.label}</p>
                 </div>
               </div>
             ))}
@@ -246,8 +246,7 @@ export default function OnboardingPage() {
           <Link href="/quickwin">
             <Button
               size="lg"
-              variant="secondary"
-              className="w-full gap-2 text-base h-14 shadow-[0_0_40px_rgba(14,165,233,0.3)]"
+              className="w-full gap-2 text-base h-14 bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-200"
             >
               Enter Your Dashboard
               <ArrowRight size={18} />
@@ -259,31 +258,31 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-[#FAFAF7] flex flex-col">
       {/* Top bar */}
-      <div className="border-b border-white/8 px-6 py-4 flex items-center justify-between">
+      <div className="border-b border-[#E8E4DC] bg-white px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="grid size-8 place-items-center rounded-xl bg-gradient-to-br from-sky-300 to-violet-500 text-slate-950">
+          <div className="grid size-8 place-items-center rounded-xl bg-gradient-to-br from-violet-600 to-amber-400 text-white shadow-sm">
             <Sparkles size={15} />
           </div>
-          <span className="font-bold text-white">Dr. Business</span>
+          <span className="font-bold text-[#1C1917]">Dr. Business</span>
         </Link>
-        <span className="text-xs text-slate-500">
+        <span className="text-xs font-medium text-[#78716C] bg-[#F5F5F4] px-3 py-1 rounded-full">
           Step {currentStep + 1} of {steps.length}
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="h-1 bg-white/5">
+      <div className="h-1.5 bg-[#E8E4DC]">
         <div
-          className="h-full bg-gradient-to-r from-sky-400 to-violet-400 transition-all duration-500 ease-out"
+          className="h-full bg-gradient-to-r from-amber-400 to-violet-600 transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
 
       {/* Content */}
       <div className="flex flex-1 items-center justify-center px-6 py-16">
-        <div className="w-full max-w-lg">
+        <div className="w-full max-w-lg bg-white p-8 rounded-3xl border border-[#E8E4DC] shadow-sm">
           <OnboardingStep
             title={step.title}
             description={step.description}
@@ -292,21 +291,20 @@ export default function OnboardingPage() {
             onSelect={handleSelect}
           />
 
-          <div className="mt-10 flex items-center justify-between">
+          <div className="mt-10 flex items-center justify-between pt-6 border-t border-[#E8E4DC]">
             <Button
               variant="ghost"
               onClick={handleBack}
               disabled={currentStep === 0}
-              className="gap-2"
+              className="gap-2 text-[#78716C] hover:text-[#1C1917]"
             >
               <ArrowLeft size={16} />
               Back
             </Button>
             <Button
-              variant="secondary"
               onClick={handleNext}
               disabled={!selected || isGenerating}
-              className="gap-2 px-8 shadow-[0_0_30px_rgba(14,165,233,0.2)]"
+              className="gap-2 px-8 bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-200"
             >
               {isGenerating
                 ? "Building your plan..."

@@ -14,24 +14,25 @@ export function Button({
 }: ButtonProps) {
   const variants = {
     primary:
-      "bg-white text-slate-950 shadow-[0_16px_50px_rgba(255,255,255,0.16)] hover:bg-sky-100",
+      "bg-violet-600 text-white hover:bg-violet-700 shadow-sm shadow-violet-200 focus:ring-violet-300",
     secondary:
-      "bg-sky-500 text-white shadow-[0_16px_50px_rgba(14,165,233,0.28)] hover:bg-sky-400",
-    ghost: "bg-transparent text-slate-300 hover:bg-white/8 hover:text-white",
+      "bg-amber-500 text-white hover:bg-amber-600 shadow-sm shadow-amber-200 focus:ring-amber-300",
+    ghost:
+      "bg-transparent text-[#78716C] hover:bg-[#F5F5F4] hover:text-[#1C1917] focus:ring-stone-200",
     outline:
-      "border border-white/12 bg-white/[0.03] text-white hover:border-sky-300/50 hover:bg-sky-400/10",
+      "border border-[#E8E4DC] bg-white text-[#1C1917] hover:border-violet-300 hover:bg-violet-50 focus:ring-violet-200",
   };
   const sizes = {
-    sm: "h-9 px-3 text-sm",
-    md: "h-11 px-4 text-sm",
+    sm: "h-8 px-3 text-xs",
+    md: "h-10 px-4 text-sm",
     lg: "h-12 px-5 text-base",
-    icon: "size-10 p-0",
+    icon: "size-9 p-0",
   };
 
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-2xl font-medium transition focus:outline-none focus:ring-2 focus:ring-sky-300/50 disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-150 focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
         variants[variant],
         sizes[size],
         className

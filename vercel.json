@@ -11,6 +11,14 @@
     {
       "path": "/api/notifications/ping?type=evening",
       "schedule": "30 14 * * *"
+    },
+    {
+      "path": "/api/unstuck/check",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/score",
+      "schedule": "0 3 * * *"
     }
   ]
 }
